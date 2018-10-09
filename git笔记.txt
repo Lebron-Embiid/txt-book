@@ -1,0 +1,110 @@
+git命令清单：（http://www.shouce.ren/api/view/a/12177）
+小乌龟下载：https://download.tortoisegit.org/tgit/2.7.0.0/
+下载教程：https://www.cnblogs.com/xuanwotianming153/p/8504762.html
+vue devtools调试工具下载：https://www.cnblogs.com/yuqing6/p/7440549.html
+
+配置github ssh的方法：
+1.查看本地是否有ssh文件：
+cd ~/.ssh
+ls
+id_rsa id_rsa.pub known_hosts（有则会显示这3个文件）
+
+2.复制公钥
+cat id_rsa.pub	（执行此命令后，复制显示出来的公钥）
+
+
+
+1.配置个人的用户名称和电子邮件地址：
+git config --global user.name "w3c"
+git config --global user.email w3c@shouce.ren
+
+git帐号：
+用户名：liuzhiguang
+密码：dm123456
+邮箱：2419503047@qq.com
+
+2.查看配置信息：
+git config --list
+//也可以直接查阅某个环境变量的设定，只要把特定的名字跟在后面即可
+git config user.name
+
+3.创建git仓库
+使用您当前目录作为Git仓库，我们只需使它初始化。
+git init
+使用我们指定目录作为Git仓库。
+git init newrepo
+
+添加想要纳入版本控制的文件：
+git add *.c
+git add README
+git add .		//添加当前目录所有文件
+
+用于查看项目的当前状态，可以查看在你上次提交之后是否有修改：
+git status
+
+提交：
+git commit -m 'initial project version'	（-m选项以在命令行中提供提交注释）
+
+提交暂存区的指定文件到仓库区
+git commit [file1] [file2] ... -m [message]
+提交工作区自上次commit之后的变化，直接到仓库区
+git commit -a
+提交时显示所有diff信息
+git commit -v
+使用一次新的commit，替代上一次提交。如果代码没有任何新变化，则用来改写上一次commit的提交信息
+git commit --amend -m [message]
+重做上一次commit，并包括指定文件的新变化
+git commit --amend [file1] [file2] ...
+
+4.从现有仓库克隆：
+git clone [url]
+比如：
+$ git clone git://github.com/schacon/grit.git
+$ git clone git://github.com/schacon/grit.git mygrit	（末尾可以指定新的名字）
+
+5. 查看执行git status结果的详细信息：
+尚未缓存的改动：git diff
+查看已缓存的改动： git diff --cached
+查看已缓存的与未缓存的所有改动：git diff HEAD
+显示摘要而非整个 diff：git diff --stat
+
+用于取消缓存已缓存的内容：git reset HEAD	
+将文件从缓存区中移除：
+git rm hello.php	（从缓存区和你的硬盘中（工作目录）删除）
+git rm --cached	（工作目录中保留着该文件）
+
+
+6.分支管理
+列出分支：git branch
+创建分支：git branch (branchname)
+切换分支：git checkout -b (branchname)
+合并分支：git merge 
+删除分支：git branch -d (branchname)
+
+7.查看提交历史：
+git log
+git log --oneline		（查看历史记录的简洁的版本）
+git log --oneline --graph	（查看历史中什么时候出现了分支、合并）
+git log --reverse		（逆向显示所有日志）
+git log --author=lebron	（查找指定用户的提交日志）
+git log --oneline --before={3.weeks.ago} --after={2010-04-18} --no-merges
+（查看 Git 项目中三周前且在四月十八日之后的所有提交， --no-merges 选项以隐藏合并提交）
+
+8.远程仓库：
+查看当前的远程库：git remote
+添加远程仓库：git remote add [shortname] [url]
+Git 有两个命令用来提取远程仓库的更新：
+1、从远程仓库下载新分支与数据：git fetch
+2、从远端仓库提取数据并尝试合并到当前分支：git pull
+删除远程仓库：git remote rm [别名]
+
+
+由于你的本地Git仓库和GitHub仓库之间的传输是通过SSH加密的，所以我们需要配置验证信息生成SSH Key：
+ssh-keygen -t rsa -C "youremail@example.com"
+（成功的话会在~/下生成.ssh文件夹，进去，打开id_rsa.pub，复制里面的key。回到github上，进入 Account Settings（账户配置），左边选择SSH Keys，Add SSH Key,title随便填，粘贴在你电脑上生成的key。）
+
+验证是否成功：ssh -T git@github.com
+
+
+9.合并commit：
+git rebase -i origin/master

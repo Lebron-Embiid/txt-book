@@ -1,0 +1,24 @@
+1.Òş²ØËÑ¹·ä¯ÀÀÆ÷Èí¼üÅÌÍ¼£º
+#sogou_secure_inputs_container{display:none;}
+input::-webkit-input-safebox-button{display:none;}
+
+2.IEÏÂÒş²Ø ÊäÈë¿òµÄXºÍÃÜÂëÑÛ¾¦Í¼±ê:
+::-ms-clear,::-ms-reveal{display:none;}
+
+3.IEÏÂ ¼æÈİ border-radius£º
+-moz-border-radius: 50%;   
+-webkit-border-radius: 50%;   
+border-radius: 50%;   
+/*½â¾öIE*/   
+behavior: url(ie-css3.htc);
+
+
+4.IOS¼æÈİinput£º
+input[type="submit"],  
+input[type="reset"],  
+input[type="button"],  
+button,select {  
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}

@@ -1,0 +1,1687 @@
+https://vuefe.cn/v2/guide/	（vue2中文文档)
+
+http://www.jianshu.com/p/333d59d80384	（css移动端的兼容性问题）
+https://j.map.baidu.com/877yO
+http://shang.qq.com/open_webaio.html	弹出qq对话框
+http://wpa.qq.com/msgrd?v=3&uin=157943100&site=qq&menu=yes
+
+http://blog.csdn.net/a4307515/article/details/50505167 （html5图片上传与预览实现）
+
+
+<!--判断手机还是PC访问-->
+	<script type="text/javascript">if(window.location.toString().indexOf('pref=padindex') != -1){}else{if(/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))){if(window.location.href.indexOf("?mobile")<0){try{if(/Android|Windows Phone|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){window.location.href="/m/index.html";}else if(/iPad/i.test(navigator.userAgent)){}else{}}catch(e){}}}}</script>
+
+
+<!--[if lt IE 9]>
+	<script src="http://cdn.static.runoob.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+	<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>  
+<![endif]-->
+
+
+<?php
+/**
+ * ECSHOP 活动列表
+ * ============================================================================
+ * 版权所有 2005-2011 深圳市德盟互联科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
+ * ----------------------------------------------------------------------------
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * ============================================================================
+ * $Author: liubo $
+ * $Id: activity.php 17217 2011-01-19 06:29:08Z liubo $
+ */
+
+define('IN_ECS', true);
+
+include_once(dirname(__FILE__) . '/includes/init.php');
+include_once(ROOT_PATH . 'includes/lib_order.php');
+
+$smarty->display('extension.dwt');
+
+?>
+
+0.移动端meta配置:(禁止伸缩)
+<meta name="keywords" content="关键词">
+<meta name="description" content="网站描述">
+<meta name="renderer" content="webkit" />//调用IE极速模式
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">	//Edge 模式告诉 IE 以最高级模式渲染文档，也就是任何 IE 版本都以当前版本所支持的最高级标准模式渲染，避免版本升级造成的影响。
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="full-screen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="address=no">
+
+
+<script>
+	window.onload=function(){
+        document.addEventListener('touchstart',function(event){
+            if(event.touches.length>1){
+                event.preventDefault();
+            }
+        })
+        var lastTouchEnd=0;
+        document.addEventListener('touchend',function(event){
+            var now=(new Date()).getTime();
+            if(now-lastTouchEnd<=300){
+                event.preventDefault();
+            }
+            lastTouchEnd=now;
+        },false)
+    }
+</script>
+
+
+ajax:post请求接口：
+var data = JSON.stringify({
+	'userId': '2088512577073115',	
+	'verifyCode': '12341gm43ru2'
+});
+
+var url = "http://api.imysky.com:6080/api1/lizhibang/coupon/cash/requestReward";
+$.ajax(url,{
+	type:"POST",
+	dataType: 'json',
+	headers : {'Content-Type':'application/json'},
+	data:data,
+	success: function(data){
+		console.log(data);
+	},
+	error: function(data){
+		console.log(data);
+	}
+})
+
+
+js控制html导航切换时的高亮效果：
+var urlstr = location.href;
+var urlstatus=false;
+$(".header_ul a,.mobile_header_nav li a").each(function () {
+	if ((urlstr + '/').indexOf($(this).attr('href')) > -1&&$(this).attr('href')!='') {
+	$(this).parent().addClass('active'); 
+	urlstatus = true;
+	} else {
+		$(this).parent().removeClass('active');
+	}
+});
+if (!urlstatus) {$(".header_ul a").eq(0).addClass('active'); }
+
+
+1.重置默认样式:
+@charset "UTF-8";
+/* CSS reset */
+*{font-family:"微软雅黑",Arial,Helvetica,sans-serif,"宋体"}
+
+*{
+	/*font-family:"微软雅黑",Arial,Helvetica,sans-serif,"PingHei","Helvetica Neue",Verdana,"宋体";*/
+	font-family:PingFang SC, Verdana, Helvetica Neue, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
+}
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{ margin: 0; padding: 0; }
+fieldset,img{ border: 0; }
+:focus{ outline: 0; }
+address,caption,cite,code,dfn,em,strong,th,var,optgroup{ font-style: normal; font-weight: normal; }
+h1,h2,h3,h4,h5,h6{ font-size: 100%; font-weight: normal; font-family: "Microsoft YaHei"; }
+abbr,acronym{ border: 0; font-variant: normal; }
+code,kbd,samp,tt{ font-size: 100%; }
+input,button,textarea,select{ *font-size: 100%; border:none;}
+body{ background: #fff; color:#5e5e5e; font: 14px/2em Microsoft YaHei,SimSun,Arial;}
+ul{ list-style: none;overflow: hidden; }
+table{ border-collapse: collapse; border-spacing: 0; }
+caption,th{ text-align: left; }
+sup,sub{ font-size: 100%; vertical-align: baseline; }
+:link, :visited, ins{ text-decoration: none; }
+blockquote,q{ quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after{ content: ''; content: none; }
+.clearfix:after{content:'\0020';display:block;height:0;clear:both;visibility:hidden;}
+.clearfix{*zoom:1;}
+.left{float:left;}
+.right{float:right;}
+.clear{ height:0; overflow:hidden; clear:both}
+
+
+定时器：
+<script type="text/javascript"> 
+	var t=3;//设定跳转的时间 
+	var timer;
+	timer = setInterval("refer()",1000); //启动1秒定时 
+	function refer(){  
+	    if(t==0){ 
+	        location="index.php"; //#设定跳转的链接地址 
+	        clearInterval(timer);
+	    } 
+	    t--; // 计数器递减 
+	} 
+	refer();
+</script>
+
+2.溢出部分显示省略号:
+display: -webkit-inline-box;
+
+overflow : hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+word-wrap: break-word;
+word-break: break-all;
+
+单行：
+display: inline-block;
+max-width: 80%;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+
+阴影：
+-webkit-box-shadow: 0 0 10px #EBEBEB;
+-moz-box-shadow: 0 0 10px #EBEBEB;
+-ms-box-shadow: 0 0 10px #EBEBEB;
+box-shadow: 0 0 10px #EBEBEB;
+
+css4 - flex布局：
+div内容垂直居中：d-flex align-content-center flex-wrap
+div高度拉伸：align-self-stretch
+两端对齐：d-flex justify-content-between
+
+怪异盒子：
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-ms-box-sizing: border-box;
+box-sizing: border-box;
+
+倒影：
+-webkit-box-reflect: below -90px -webkit-linear-gradient(transparent,transparent 65%,rgba(255,255,255,.4));
+
+
+
+<div class="wrap">  
+	<div class="image"><img src="images/xmt_about_logo.png" /></div>  
+	<div class="down">  
+		<div class="reflection"></div>
+	</div>  
+</div> 
+
+
+.wrap{position:relative;}  
+.reflection{
+	width: 2.49rem;height: .64rem;
+	background:url(../images/xmt_about_logo.png) bottom center no-repeat;  
+	-webkit-transform: scaleY(-1);  
+	-moz-transform: scaleY(-1);  
+	-ms-transform: scaleY(-1);  
+	-o-transform: scaleY(-1);  
+	transform: scaleY(-1);  
+	opacity:0.1;       
+	filter:alpha(opacity=10);  
+ } 
+
+ios手机input样式兼容：
+input[type="submit"],  
+input[type="reset"],  
+input[type="button"],  
+button {  
+-webkit-appearance: none;  
+}
+
+
+-webkit-box-shadow: 0 0 0px 1000px white inset;		//解决input输入框背景颜色变成黄色的问题
+background: repeating-linear-gradient(30deg, #79b, #79b 15px, #58a 0, #58a 30px);  //条形渐变背景
+
+style="border-collapse:separate; border-spacing: 0 10px;"	//表格tr间距
+
+3.jq选项卡（封装函数）:
+function tab(fat,obj,other){
+	$(fat).on("click",obj,function(){
+		var index = $(this).index();
+		$(this).addClass("active").siblings().removeClass("active");
+		$(other).eq(index).addClass("active").siblings().removeClass("active");
+	})
+}
+
+
+4.返回顶部
+function goTop(){
+	$('html,body').animate({'scrollTop':0},600);
+}
+
+var $toTop = $(".fixed");
+$toTop.hide();
+$(window).scroll(function () {
+	if ($(window).scrollTop() > 100) {
+		if($toTop.is(":hidden")) {
+			$toTop.stop().fadeIn(500);
+		}
+	}
+	else {
+		if($toTop.is(":visible")) {
+			$toTop.stop().fadeOut(500);
+		}
+	}
+});
+$toTop.click(function () {
+	$('body,html').stop().animate({scrollTop: 0}, 300);
+	return false;
+});
+
+
+
+//滚动的时候给导航添加样式
+<script>
+	$(function(){
+		$(window).scroll(function(){
+			if($(window).scrollTop() >= $(".banner").height()-89){
+				$(".header").addClass("active");
+			}else{
+				$(".header").removeClass("active");
+			}
+		})
+	})
+</script>
+
+
+5.Swiper 轮播:
+<div class="swiper-container swiper-no-swiping">   //禁止手动滑动
+	<div class="swiper-wrapper">
+		<div class="swiper-slide"></div>
+		<div class="swiper-slide"></div>
+		<div class="swiper-slide"></div>
+	</div>
+	<div class="swiper-scrollbar"></div>	//加滚动条
+	<div class="swiper-pagination"></div>	//加分页器
+	<div class="swiper-button-prev"></div>	//前进后退按钮
+    	<div class="swiper-button-next"></div>
+</div>
+
+.swiper-container{
+	overflow: hidden;
+}
+.swiper-container .swiper-wrapper{
+	overflow: hidden;
+}
+.swiper-container .swiper-slide{
+	width: 100%;
+	float: left;
+}
+.swiper-container .swiper-slide img{
+	display: block;
+	width: 100%;
+}
+
+css:
+.swiper-container {
+	width: 100%;
+}
+.swiper-slide {
+	text-align: center;
+	background: #fff;
+	/* Center slide text vertically */
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+实例化:
+$(".swiper-container .swiper-wrapper").width(($(".swiper-container .swiper-slide").width())*($(".swiper-container .swiper-slide").length+2));
+
+var swiper = new Swiper('.swiper-container',{
+	initialSlide:0,			//默认第1个显示
+	direction : 'vertical',			//切换滑动方向为 垂直方向
+	freeMode: true,			//开启自由滑动
+	freeModeMomentum : false,	//关闭自由滑动的惯性
+        	slidesPerView: 3,		//容器同时显示的slides数量， 'auto'自动根据宽度设定数量
+	resistanceRatio : 0,		//为0则取消回弹距离
+	scrollbar: '.swiper-scrollbar',	//启用滚动条
+        	scrollbarHide: false,		//滚动条是否自动隐藏
+	pagination: '.swiper-pagination',	//启用分页器
+	paginationClickable: true,	//分页器指示点可以控制切换
+	autoplay : 5000,		//自动切换
+	loop: true,			//swiper循环
+	autoplayDisableOnInteraction : false,	//操作swiper后自动切换不会停止
+	centeredSlides: true,		//居中
+	mousewheelControl,		//鼠标滚轮控制Swiper切换(3.x版本)
+	mousewheels: true,		//鼠标滚轮控制Swiper切换(4.x版本)
+        	spaceBetween: 30,		//slide之间的距离
+        	grabCursor: true,		//光标在Swiper上时成手掌状
+	scrollbarHide: false,		//滚动条自动隐藏
+	scrollbarDraggable: true ,	//为true时允许拖动滚动条
+	slideToClickedSlide: true,	//点击slide会居中
+	speed: 300,			//轮播滑动开始到结束的时间
+	navigation: {
+    		nextEl: '.swiper-button-next',
+    		prevEl: '.swiper-button-prev',
+  	},
+	nextButton: '.swiper-button-next',
+    	prevButton: '.swiper-button-prev',	//显示前进后退按钮
+});
+
+//鼠标移上去禁止自动轮播
+$('.index_banner').mouseover(function(){
+  	swiper.stopAutoplay();
+})
+$('.index_banner').mouseout(function(){
+  	swiper.startAutoplay();
+})
+
+
+pc与手机响应：
+	var swiper;
+
+	function product_pc(){
+	$(".index_video .swiper-wrapper").width(($(".index_video .swiper-slide").width())*($(".index_video .swiper-slide").length+2));
+		if($(window).width() > 768){
+			swiper = new Swiper('#index_video',{
+				initialSlide:0,				//默认第1个显示
+			    	slidesPerView: 3,		//容器同时显示的slides数量， 'auto'自动根据宽度设定数量
+				resistanceRatio : 0,		//为0则取消回弹距离
+				loop: true,					//swiper循环
+		        		spaceBetween: 30,		//slide之间的距离
+				speed: 500,					//轮播滑动开始到结束的时间
+				nextButton: '.swiper-button-next',
+		    		prevButton: '.swiper-button-prev'
+			});
+		}
+	}
+
+	function product_mobile(){
+	$(".index_video .swiper-wrapper").width(($(".index_video .swiper-slide").width())*($(".index_video .swiper-slide").length+2));
+		if($(window).width() <= 768){
+			swiper = new Swiper('#index_video',{
+				initialSlide:0,				//默认第1个显示
+			    	slidesPerView: 1,		//容器同时显示的slides数量， 'auto'自动根据宽度设定数量
+				resistanceRatio : 0,		//为0则取消回弹距离
+				autoplay : 3000,
+				autoplayDisableOnInteraction : false,
+				loop: true,					//swiper循环
+		        		spaceBetween: 0,		//slide之间的距离
+				speed: 500				//轮播滑动开始到结束的时间
+			});
+		}
+	}
+
+	product_pc();
+	product_mobile();
+	
+	$(window).resize(function(){
+		product_pc();
+		product_mobile();
+	})
+
+
+
+6.修改placeholder 文本颜色:
+input:-ms-input-placeholder{color:#eee;}/* Internet Explorer 10+ */ 
+input::-webkit-input-placeholder{color:#eee;}/* WebKit browsers */
+input::-moz-placeholder{color:#eee;}/* Mozilla Firefox 4 to 18 */ 
+input:-moz-placeholder{color:#eee;}/* Mozilla Firefox 19+ */ 
+
+/*textarea*/备注框
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { 
+	color: #eee; 
+} 
+input:-moz-placeholder, textarea:-moz-placeholder { 
+	color: #eee; 
+}
+
+
+7.Bootstrap 轮播:
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+<!-- Indicators -->
+	<ol class="carousel-indicators">
+		<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+		<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+	</ol>
+<!-- Wrapper for slides -->
+	<div class="carousel-inner" role="listbox">
+		<div class="item active">
+			<img src="images/banner.jpg" alt="" class="img-responsive">
+		</div>
+		<div class="item">
+			<img src="images/banner.jpg" alt="" class="img-responsive">
+		</div>
+		<div class="item">
+			<img src="images/banner.jpg" alt="" class="img-responsive">
+		</div>
+	</div>
+
+	<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+		<img src="images/index_left.png" alt="">
+	</a>
+	<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+		<img src="images/index_right.png" alt="">
+	</a>
+</div>
+
+data-interval="0"				//添加属性，禁止自动轮播
+$('.carousel').carousel('pause')			//取消自动播放
+$('.carousel').carousel({
+  	interval: 3000			//设置定时器
+});
+$('.carousel').mouseover(function(){
+	$('.carousel').carousel('pause');		//移上去暂停自动轮播
+})
+$('.carousel').mouseout(function(){
+	$('.carousel').carousel('');		//移出取消暂停
+})
+
+
+8.Boostrap 模态框:
+$('.modal').modal({
+	show:false,		//默认隐藏
+	backdrop: 'static',		//点击背景空白处不被关闭
+	keyboard: false		//触发键盘esc事件时不关闭
+}); 
+
+
+兼容IE6轮播ft-carousel.js：
+<link rel="stylesheet" href="css/ft-carousel.css" />
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script src="js/ft-carousel.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+<div class="ft-carousel" id="carousel_1">
+	<ul class="carousel-inner">
+		<li class="carousel-item"><img src="./img/a1.png" /></li>
+		<li class="carousel-item"><img src="./img/a2.png" /></li>
+		<li class="carousel-item"><img src="./img/a3.png" /></li>
+		<li class="carousel-item"><img src="./img/a4.png" /></li>
+		<li class="carousel-item"><img src="./img/a5.png" /></li>
+		<li class="carousel-item"><img src="./img/a6.png" /></li>
+	</ul>
+</div>
+
+	
+$("#carousel_1").FtCarousel({
+	index: 0,		//初始索引
+	auto: true,		//是否自动轮播
+	time: 3000,	//自动轮播时间
+	indicators: false,	//是否显示指示按钮
+	buttons: true	//是否显示左右切换按钮
+});  	
+
+
+9.双击禁止选中文字:
+FF用样式 ：-moz-user-select:none;
+FF以外的浏览器用：onselectstart="return false"（直接加在需要作用的标签）
+
+10.应用其他字体:
+@font-face {
+ font-family: 'LiXuKe';
+ src: url('../font/lxk.ttf');
+ src: local('../font/lxk Regular'),
+      local('../font/lxk'),
+      url('../font/lxk.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'HY';
+	src: url('hycst.eot'); /* IE9 Compat Modes */
+	src: url('hycst.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         	url('hycst.woff') format('woff'), /* Modern Browsers */
+         	url('hycst.ttf')  format('truetype'), /* Safari, Android, iOS */
+         	url('hycst.svg#hycst') format('svg'); /* Legacy iOS */
+}
+
+11.上传文件
+$(".file").on("change","input[type='file']",function(){
+	var filePath=$(this).val();
+	if(filePath.indexOf("jpg")!=-1 || filePath.indexOf("png")!=-1){
+		$(".fileerrorTip").html("").hide();
+	        var arr=filePath.split('\\');
+	        var fileName=arr[arr.length-1];
+	        $(".filename").html(fileName);
+	}else{
+	        $(".showFileName").html("");
+	        $(".filename").html("您未上传文件，或者您上传文件类型有误！").show();
+	        return false;
+	}
+})
+
+获取图片预览：
+function imgPreview(fileDom){
+        //判断是否支持FileReader
+        if (window.FileReader) {
+            var reader = new FileReader();
+        } else {
+            alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+        }
+
+        //获取文件
+        var file = fileDom.files[0];
+        var imageType = /^image\//;
+        //是否是图片
+        if (!imageType.test(file.type)) {
+            alert("请选择图片！");
+            return;
+        }
+        //读取完成
+        reader.onload = function(e) {
+            //获取图片dom
+            var img = document.getElementById("ewm");
+            //图片路径设置为读取的图片
+            img.style.display = "block";
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+12.悬停边框
+li{ width:1200px; height:213px; position:relative; background:none;}
+
+li::before, li::after { box-sizing: border-box;content: ''; position: absolute; width: 100%; height: 100%;}
+li::before, li::after { border:1px solid transparent; width: 0; height: 0;}
+li::before { top: 0; left: 0;}
+li::after { bottom: 0; right: 0;}
+li:hover::before, li:hover::after { width: 100%; height: 100%;}
+li:hover::before { border-top-color: #f2054d; border-right-color: #f2054d; -webkit-transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;	transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;}
+li:hover::after { border-bottom-color: #f2054d; border-left-color: #f2054d; -webkit-transition: border-color 0s ease-out 0.5s, width 0.25s ease-out 0.5s, height 0.25s ease-out 0.75s;	transition: border-color 0s ease-out 0.5s, width 0.25s ease-out 0.5s, height 0.25s ease-out 0.75s;}
+
+
+13.导航滑动效果
+<div>
+	<ul>
+        	<li>首页</li>
+       		<span class="line"></span>
+        </ul>
+</div>
+
+ul span{
+	width: 100%;
+	position: absolute;
+	height: 2px;
+	bottom: 0;
+	background: #E31939;
+}
+
+移入:
+$('ul span').css({'left':$('ul li').eq(0).position().left,'width':$('ul li').eq(0).outerWidth()});
+$('ul li').hover(function(){
+	$('ul span').stop().animate({left:$(this).position().left,width:$(this).outerWidth()});	
+},function(){
+	$('ul span').stop().animate({left:$('ul li').eq(0).position().left,width:$('ul li').eq(0).outerWidth()});
+})
+
+点击:
+$('ul span').css({'left':$('ul li').eq(0).position().left,'width':$('ul li').eq(0).outerWidth()});
+$('ul').on("click","li",function(){
+	$('ul span').stop().animate({left:$(this).position().left,width:$(this).outerWidth()});
+})
+
+
+14.图片翻转效果
+<ul>
+	<li>
+		<a href="javascript:void(0);" title="链接说明" class="first"><img src="images/sm1.jpg" alt="图片说明"></a>
+		<a href="javascript:void(0);" title="链接说明" class="last"><img src="images/sm2.jpg" alt="图片说明"></a>
+	</li>
+</ul>
+
+
+ul{
+	width: 1070px;
+	overflow: hidden;
+	float: left;
+	margin-bottom: 0;
+	height: 340px;
+}
+ul li{
+	width: 214px;
+	height: 113px;
+	float: left;
+	background: #fff;
+	border-right: 1px solid #EEEEEE;
+	border-bottom: 1px solid #EEEEEE;
+	position: relative;
+	cursor: pointer;
+}
+ul li a{
+	display: block;
+	overflow: hidden;
+	height: 113px;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	-webkit-transform: translate(-50%);
+	-moz-transform: translate(-50%);
+	-ms-transform: translate(-50%);
+	transform: translate(-50%);
+}
+ul li a img{
+	display: block;
+	margin: 20px auto 0;
+	transition: all .5s linear;
+	/*transition: .3s linear;*/
+}
+ul li a.first img{
+	z-index: 2;
+	filter: alpha(opacity=60);
+	-moz-opacity: 1;
+	opacity: 1;
+}
+ul li a.last img{
+	z-index: 1;
+	transform: rotateY(180deg);
+	-ms-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
+	-webkit-transform: rotateY(180deg);
+	-o-transform: rotateY(180deg);
+	filter: alpha(opacity=0);
+	-moz-opacity: 0;
+	opacity: 0;
+}
+ul li:hover a.first img{
+	-ms-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
+	-webkit-transform: rotateY(180deg);
+	-o-transform: rotateY(180deg);
+	transform: rotateY(180deg);
+	z-index: 1;
+	alpha(opacity=0);
+	-moz-opacity: 0;
+	opacity: 0;
+}
+ul li:hover a.last img{
+	transform: rotateY(360deg);
+	z-index: 2;
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	opacity: 1;
+	-ms-transform: rotateY(360deg);
+	-moz-transform: rotateY(360deg);
+	-webkit-transform: rotateY(360deg);
+	-o-transform: rotateY(360deg);
+}
+
+var num = 0;
+function img(fat,obj,n){
+	$(fat).on("mouseover",obj,function(){
+		var img_src1 = $(this).find("a").eq(0).find("img").attr("src");
+		var img_src2 = $(this).find("a").eq(1).find("img").attr("src");
+		_this = $(this).index();
+		$(this).addClass("active").siblings().removeClass("active");
+		$(this).find("img").attr("src",img_src2);
+		num = _this;
+	}).on("mouseout","li",function(){
+		$(this).removeClass("active");
+		$(this).find("img").attr("src",img_src1);
+	})
+}
+
+img("ul","li",num);
+
+
+
+15.背景图片铺满body（兼容IE6/7/8/9以及所有现代浏览器）
+html, body
+{
+    background: url('../images/404_pcbg.jpg');
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/404_pcbg.jpg', sizingMethod='scale');
+    -ms-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/404_pcbg.jpg', sizingMethod='scale');
+    background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+}
+
+
+16.after写三角形：
+.tri-up{
+	width: 0;
+	height:0;
+	border-left:20px solid transparent;
+	border-right: 20px solid transparent;
+	border-bottom: 20px solid red;
+}
+
+
+
+17.模拟上传：
+$(".file_btn").click(function(){
+	$(".file").trigger("click");
+})
+$(".file_box").on("change",".file",function(){
+    	var filePath=$(this).val();
+	if(filePath.indexOf("jpg")!=-1 || filePath.indexOf("png")!=-1){
+	var arr=filePath.split('\\');
+        var fileName=arr[arr.length-1];
+        $(".file_name").val(fileName);
+    }else{
+	$(".file_name").val("您未上传文件，或者您上传文件类型有误！").show();
+        return false;
+    }
+})
+
+
+18.自动计算分页ul的宽：
+var marginR = parseInt($(".route .page li").css("margin-right"))*($(".route .page li").length-1);
+var liWidth = 0;
+for(var i=0;i<$(".route .page li").length;i++){
+	liWidth += $(".route .page li").eq(i).width();
+}
+$(".route .page").width(marginR+liWidth);
+
+
+19.下拉手风琴效果：
+function slide_list(num){
+	$("ul li").eq(num).click(function(){
+		$(this).siblings().find(".btn_right").parent().next().stop().slideUp("fast");
+		$(this).find(".btn_right").parent().next().stop().slideToggle(500);
+		if($(this).find(".btn_right").html() == "-"){
+			$(this).find(".btn_right").html("+");
+		}else{
+			$(this).find(".btn_right").html("-");
+		}
+		$(this).siblings().find(".btn_right").html("+");
+	})
+}
+var len = $("ul li").length;
+for(var i=0;i<len;i++){
+	slide_list(i);
+}
+
+
+20.地图插件：
+<script type="text/javascript" src="js/bdMap.js"></script>	//head里引入地图js
+
+html:
+<div class="map" id="map"></div>
+
+css:
+#allmap{
+	height: 4.8rem;
+}
+
+js:
+<script>
+	//"allmap"为ID名称
+	ShowMap("map",{
+		city: 默认定位的城市						(city:'武汉'),
+		addr: 标注地址。						(addr:'广东省深圳市南山区科技园园西工业区25栋3段406室'),
+		title: 窗口标题						(title:'移动拖拽'),
+		lawfirm: 公司名称						(lawfirm:'深圳辰视智能科技有限公司'),
+		tel: 联系电话						(tel:'17603017473'),
+		user: 主任（可以在bdMap里自定义自己的显示名字）			(user:'lebron'),
+		mapx: 标注地图的地址					(mapx:'114.277939,22.727359'),
+		pic: 显示照片						(pic:'images/phone.png'),
+		ismove: 是否可以拖动标注点（设置标注时会用的着）			(ismove: true),
+		piobj: 接收拖动坐标的表单ID（设置标注时用于接受拖动后的坐标）,
+		zoom: 地图放大等级 默认14					(zoom: 14)
+	})
+</script>
+
+注意：标注坐标显示的先后顺序：先按mapx ，mapx为空时按addr，addr为空时按city，city为空时按IP定位 
+getBDAddress 根据浏览器获取地址：(需要浏览器支持html5)
+callBackFun: 获取回调函数
+spStr: 返回信息的分隔符，默认空。可以设置为,号。返回格式：省,市,区,街,门牌
+演示：广东省深圳市福田区农轩路55号
+
+
+21.消息弹出框（自动消失）
+function ShowTip(tip, type) {
+        var $tip = $('#tip');
+        if ($tip.length == 0) {
+            $tip = $('<span id="tip" style="position:absolute;bottom:30%;left: 50%;z-index:9999;padding:0 20px;background:rgba(0,0,0,.65);border-radius:30px;border:0;color:#fff;font-size:.22rem;"></span>');
+            $('body').append($tip);
+        }
+        $tip.stop(true).attr('class', 'alert alert-' + type).text(tip).css('margin-left', -$tip.outerWidth() / 2).fadeIn(500).delay(2000).fadeOut(500);
+    }
+
+    function ShowMsg(msg) {
+        ShowTip(msg, 'info');
+    }
+
+
+22.未知高度的图片/div文字 水平垂直居中:
+ul li{
+	display: flex;
+	display: -webkit-flex;
+	justify-content: center;
+	-webkit-justify-content: center;
+}
+ul li img{
+	align-self: center;
+	-webkit-align-self: center;
+}
+
+未知宽高图片自适应
+function imgRes(obj){
+	var imgL = $(obj).length;
+	for(var i=0;i<imgL;i++){
+		var imgw = parseInt($(obj).eq(i).find('img').width())/100;
+		var imgh = parseInt($(obj).eq(i).find('img').height())/100;
+
+		$(obj).eq(i).find('img').width(imgw+"rem");
+		$(obj).eq(i).find('img').height(imgh+"rem");
+	}
+}
+
+
+
+23.整屏图片背景：
+var wh=window.innerHeight;
+$(window).resize(function(){$('.fullimg').height(wh)});
+
+html,
+body {
+  height: 100%;
+  background: url(../images/redbag_bg.jpg) center center no-repeat;
+  background-size: 100% 100%;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+
+24.fullpage.js 全屏滚动
+
+<script src="js/jquery.fullPage.min.js"></script>
+
+<ul class="slide" id="menu">
+	<li data-menuanchor="page1" class="active"><a href="#page1"></a></li>
+	<li data-menuanchor="page2" ><a href="#page2"></a></li>
+	<li data-menuanchor="page3" ><a href="#page3"></a></li>
+	<li data-menuanchor="page4" ><a href="#page4"></a></li>
+</ul>
+<div id="dowebok">
+	<div class="section">
+		<a href="#page2" class="click_next"><img src="images/click_next_on.png" alt=""></a>
+	</div>
+	<div class="section">
+		<a href="#page3" class="click_next"><img src="images/click_next_on.png" alt=""></a>
+	</div>
+	<div class="section">
+		<a href="#page4" class="click_next"><img src="images/click_next_on.png" alt=""></a>
+	</div>
+	<div class="section">
+		<a href="#page1" class="click_next"><img src="images/click_next_on.png" alt=""></a>
+	</div>
+</div>
+
+
+$('#dowebok').fullpage({
+	anchors:["page1","page2","page3","page4"],
+	menu: '#menu',
+	resize: false,
+	afterLoad: function(anchorLink,index){		//滚屏之后触发的事件，anchorLink 锚点名称，index 索引(1开始)
+		
+	}
+});
+
+
+锚点导航滑动切换：
+<nav class="nav">
+    <ul>
+      <li><a href="#section1">one</a></li>
+      <li><a href="#section2">two</a></li>
+      <li><a href="#section3">three</a></li>
+    </ul>
+  </nav>
+  <section id="section1">
+    <h1>one</h1>
+    <p>
+     Query是继prototype之后又一个优秀的Javascript库。它是轻量级的js库 ，它兼容CSS3，还兼容各种浏览器（IE 6.0+, FF 1.5+, Safari 2.0+, Opera 9.0+），jQuery2.0及后续版本将不再支持IE6/7/8浏览器。jQuery使用户能更方便地处理HTML（标准通用标记语言下的一个应用）、events、实现动画效果，并且方便地为网站提供AJAX交互。jQuery还有一个比较大的优势是，它的文档说明很全，而且各种应用也说得很详细，同时还有许多成熟的插件可供选择。。
+    </p>
+  </section>
+ 
+  <section id="section2">
+    <h1>two</h1>
+    <p>
+    jQuery是一个兼容多浏览器的javascript库，核心理念是write less,do more(写得更少,做得更多)。jQuery在2006年1月由美国人John Resig在纽约的barcamp发布，吸引了来自世界各地的众多JavaScript高手加入，由Dave Methvin率领团队进行开发。如今，jQuery已经成为最流行的javascript库，在世界前10000个访问最多的网站中，有超过55%在使用jQuery。
+    </p>
+  </section>
+  <section id="section3">
+    <h1>three</h1>
+   jQuery是免费、开源的，使用MIT许可协议。jQuery的语法设计可以使开发更加便捷，例如操作文档对象、选择DOM元素、制作动画效果、事件处理、使用Ajax以及其他功能。除此以外，jQuery提供API让开发者编写插件。其模块化的使用方式使开发者可以很轻松的开发出功能强大的静态或动态网页。
+  </section>
+
+  <script src="jquery-1.11.0.min.js"></script>
+  <script src="jquery.navScroll.js"></script>
+
+  <script>
+    $('.nav').navScroll({
+      mobileDropdown: true,
+      mobileBreakpoint: 768,
+      scrollSpy: true
+    });
+  </script>
+
+
+25.jquery.nicescroll.js 滚动条插件使用方法：
+#content{
+	height: 300px;
+	overflow: hidden;
+}
+
+<div id="content">
+	...
+</div>
+
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.nicescroll.js"></script>
+<script type="text/javascript">
+	
+	//滚动区域高
+	$("#content").height($(window).height());
+  	$(window).resize(function(){
+  		$("#content").height($(window).height());
+  	})
+
+	$('#content').niceScroll({
+        	cursorcolor: "#ccc",//#CC0071 光标颜色
+                cursoropacitymax: 1, //改变不透明度非常光标处于活动状态（scrollabar“可见”状态），范围从1到0
+                touchbehavior: false, //使光标拖动滚动像在台式电脑触摸设备
+                cursorwidth: "5px", //像素光标的宽度
+                cursorborder: "0", // 	游标边框css定义
+                cursorborderradius: "5px",//以像素为光标边界半径
+                autohidemode: false, //是否隐藏滚动条（"hidden" 一直隐藏）
+		nativeparentscrolling: true // 检测内容底部便于让父级滚动
+        });
+</script>
+
+https://www.cnblogs.com/reweb/p/3268775.html (详细方法)
+
+
+
+
+
+26.minigrid.js  瀑布流：
+js:
+<script src="js/minigrid.js"></script>
+
+css:
+.grid{
+	width: 1200px;
+	margin: 0 auto;
+	position: relative;
+}
+.grid-item{
+	position: absolute;
+	width: 392px;
+	overflow: hidden;
+	padding-bottom: 20px;
+}
+
+html:
+<div class="grid">
+	<div class="grid-item"></div>
+	<div class="grid-item"></div>
+	<div class="grid-item"></div>
+	<div class="grid-item"></div>
+</div>
+
+<script>
+	$(function(){
+		minigrid('.grid', '.grid-item');//
+
+		minigrid('.grid', '.grid-item', 5, null);
+        	$(window).on('resize', function(){
+            		minigrid('.grid', '.grid-item');
+        	});
+	})
+</script>
+
+
+pinterest_grid.js 瀑布流：
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/pinterest_grid.js"></script>
+
+<div id="gallery-wrapper">
+	<div class="white-panel></div>
+	<div class="white-panel></div>
+	<div class="white-panel></div>
+</div>
+
+$("#gallery-wrapper").pinterest_grid({
+	no_columns: 3,
+        padding_x: 10,
+        padding_y: 10,
+        margin_bottom: 50,
+        single_column_breakpoint: 700
+});
+
+
+27.段落溢出 （展开收起）：
+
+<li>
+	<h3><a href="" class="pic"><img src="images/thumb_head2.png" alt="">昵称</a><a href="" class="hf">回复</a><span>2015/10/28</span></h3>
+	<p class="active two">金发碧眼的漂亮女孩的评论，金发碧眼的漂亮女孩的评论！<span class="span">展开</span></p>
+</li>
+
+li p{
+	line-height: 22px;
+	padding-left: 30px;
+	overflow : hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	/*-webkit-line-clamp: 2;*/
+	-webkit-box-orient: vertical;
+	position: relative;
+}
+li p.active{
+	height: 42px;
+	-webkit-line-clamp: 2;
+}
+li p.active.two .span{
+	display: none;
+}
+li p .span{
+	position: absolute;
+	right: 0;
+	bottom: -2px;
+	background: #F4F4F4;
+	padding-left: 8px;
+	color: #3f79c7;
+	font-size: 14px;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+判断大于2行显示 展开
+var p_len = $(".thumb .thumb_right .message p").length;
+    for(var i=0;i<p_len;i++){
+        if((parseInt($(".thumb .thumb_right .message p").eq(i).height())/22) >= 3){
+            $(".thumb .thumb_right .message p").eq(i).addClass("active");
+        }
+    }
+
+
+$("li p .span").on("click",function(){
+  	if($(this).html() == "展开"){
+  		$(this).html("收起");
+  	}else{
+  		$(this).html("展开");
+  	}
+  	$(this).parent().toggleClass("active");
+  })
+
+28.文字渐变 css：
+p{
+    color: green;
+    background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(0, 128, 0, 1)), to(rgba(51, 51, 51, 1)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+
+29. miboscroll 移动端 滑动联动控件：
+https://www.cnblogs.com/qingcaixiaoge/p/5508197.html（参考）
+
+<link rel="stylesheet" href="mobiscroll-2.13.2.full.min.css">
+<script src="jquery-3.2.1.min.js"></script>
+<script src="mobiscroll-2.13.2.full.min.js"></script>
+
+<ul id="areaList" style="display:none;">
+	<li>
+		<span data-id="1">全部</span>
+	</li>
+	<li  class="dw-sel">
+		<span data-id="21"  class="dw-sel">医生</span>
+	</li>
+	<li>
+		<span data-id="40">客户经理</span>
+	</li>
+</ul>
+
+
+var i;
+var tabname;
+$('#areaList').mobiscroll().treelist({
+	theme: 'android-holo-light',//样式  
+	lang: 'zh',//语言  
+	display: 'bottom',//指定显示模式  
+	fixedWidth: [100,100],//2组滚动框的宽度  
+	placeholder: '选择',//placeholder
+	inputClass:'ui-input', //为插件生成的input添加样式
+	inputName:'',
+	btnClass:'', //设置按钮显示的样式
+	labels: ['省', '市'],
+	headerText:function(valueText){return "请选择地区"},
+	rows:5,//滚动区域内的行数  
+	showLabel:true,//是否显示labels  
+	onSelect:function(valueText,inst){
+	
+	},
+	defaultValue: ["全部","医生","客户经理"],//设置初始值  
+	formatResult: function (array) { //返回自定义格式结果                          
+		i = array[0];
+		tabname = $(this)[0].defaultValue[i];
+		// console.log(tabname)
+	},
+	onBeforeShow: function (inst) {
+		// $(".navbar-fixed-top").css({"position":"absolute"});
+		// $(".banner.mobile").removeClass("mt9");
+    	},
+    	onSelect: function (inst) {
+		$(".navbar-fixed-top").css({"position":"fixed"});
+		// $(".banner.mobile").addClass("mt9");
+		$(".expert .list .tabname").html(tabname);
+		$(".expert .expert_person").eq(i).addClass("active").siblings().removeClass("active");
+    	}
+});
+
+
+
+30. 禁止 pc/移动端 滚动条：
+$(".navbar-toggle").click(function(){
+	$("body,html").css({"overflow-y":"hidden"});
+	$("body").css({"position":"fixed","top":"0","left":"0"})
+})
+$(".common_nav .close_btn").click(function(){
+	$("body,html").css({"overflow-y":"auto"});
+	$("body").css({"position":"relative"})
+})
+
+
+31.jq判断页面图片是否加载完成：
+var imgdefereds=[];
+	$('img').each(function(){
+	var dfd=$.Deferred();
+	$(this).bind('load',function(){
+	dfd.resolve();
+}).bind('error',function(){
+	//图片加载错误，加入错误处理
+	// dfd.resolve();
+	})
+	if(this.complete) setTimeout(function(){
+	dfd.resolve();
+},10);
+	imgdefereds.push(dfd);
+})
+$.when.apply(null,imgdefereds).done(function(){
+	minigrid('.grid', '.grid-item');
+});
+
+
+
+32.选择常用标签：
+var label_val = [];
+//删除数组指定值元素的方法
+function removeByValue(arr, val) {
+	for(var i=0; i<arr.length; i++) {
+		if(arr[i] == val) {
+			arr.splice(i, 1);
+			break;
+		}
+	}
+}
+$(".release_article .right form ul").on("click","li",function(){
+	$(this).toggleClass("active");
+	if($(this).hasClass("active")){
+		label_val.push($(this).find("a").html());
+		$(".add_label").val(label_val);
+	}else{
+		removeByValue(label_val, $(this).find("a").html());
+		$(".add_label").val(label_val);
+	}
+})
+
+
+33.生日插件及使用方法：
+
+<link rel="stylesheet" href="css/jedate.css">
+<script src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/jedate.js"></script>
+<script type="text/javascript" src="js/date.js"></script>
+
+<input type="text" class="form-control vinput" id="birthday" name="birthday" placeholder="请选择生日" readonly>
+
+
+全选：
+$(document).on("click", ".all", function (e) {    
+	$(".check").prop('checked', $(this).prop("checked"));
+        if($(this).prop("checked") == true){
+        	$("#topic_photo li").addClass("active");
+        }else{
+        	$("#topic_photo li").removeClass("active");
+        }
+});
+
+
+
+34.百度编辑器：
+<link href="editor/css/ueditor.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" charset="utf-8" src="editor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="editor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="editor/lang/zh-cn/zh-cn.js"></script>
+
+<script id="editor" name="content" type="text/plain" style="width:715px;height:550px;"></script>
+
+<script type="text/javascript">
+    var ue = UE.getEditor('editor',{
+        toolbars:[[
+            'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'removeformat', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','|',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'fontfamily', 'fontsize', '|',
+            'directionalityltr', 'directionalityrtl', 'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+            'link', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+            'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', '|',
+            'horizontal',
+            'inserttable'
+        ]],
+    });
+
+    function checkform(){
+        if($('[name=title]').val().length<1){
+            alert('请填写标题');
+            return false;
+        }
+        if($('[name=content]').length<1 || $('[name=content]').val().length<1){
+            alert('请填写内容');
+            return false;
+        }
+                if($('[name=file]').val().length<1){
+            alert('请上传封面图');
+            return false;
+        }
+                if($('[name=cat]').val().length<1){
+            alert('请选择所属分类');
+            return false;
+        }
+        $('#pubform').submit();
+    }
+</script>
+
+
+35.分享到：
+<div>
+    <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style"><span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a class="jiathis_button_icons_5"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+    </div>
+    <script type="text/javascript" >
+        var jiathis_config={
+            summary:"",
+            shortUrl:false,
+            hideMore:false
+        }
+    </script>
+    <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+</div>
+
+
+
+36.视频plyr插件：
+<link rel="stylesheet" href="css/plyr.css">
+<script src="js/plyr.js"></script>
+
+<video poster="images/company_canada_pic.png" controls>
+		<source src="video/xlk.mp4" type="video/mp4">
+</video>
+<script>
+	var players = plyr.setup('video');
+	$(players[0].getContainer()).hover(function () {
+		$('div.plyr__controls', this).show();//鼠标移动上去显示
+	}, function () {
+		$('div.plyr__controls', this).hide();//鼠标移动出来隐藏
+	})
+		.find('div.plyr__controls').hide();//隐藏控制条
+
+	players[0].play();		//播放
+	players[0].pause();		//暂停
+	players[0].restart();		//重新播放
+	players[0].togglePlay();	//切换播放
+	players[0].isFullscreen();	//是否全屏
+</script>
+
+
+37.自定义下滑选项卡：
+var mb = parseInt($(".right_nav ul li").css("margin-bottom"));
+var len = $(".right_nav ul li").length;
+var het = $(".right_nav ul li").height()+mb;
+var i = 0;
+$(".up").click(function(){
+	i--;
+	console.log(i);
+	if(i<0){
+		i=len-4;
+		$(".right_nav ul").stop().animate({"top":"-"+het*(len-4)+"px"})
+	}else{
+		$(".right_nav ul").stop().animate({"top":"-"+het*i+"px"},500);
+	}
+})
+$(".down").click(function(){
+	i++;
+	console.log(i);
+	if(i>len-4){
+		$(".right_nav ul").stop().animate({"top":"-"+het*0+"px"})
+		i=0;
+	}else{
+		$(".right_nav ul").stop().animate({"top":"-"+het*i+"px"},500)
+	}
+})
+
+
+38.获取验证码倒计时：
+function invokeSettime(obj){
+	var countdown=60;
+	settime(obj);
+	function settime(obj) {
+		if (countdown <= 0) {
+		   	$(obj).attr("disabled",false);
+		  	$(obj).text("获取验证码");
+		   	countdown = 60;
+		   	return;
+		} else {
+		   	countdown--;
+		   	$(obj).attr("disabled",true);
+		   	$(obj).text(countdown+"s");
+		}
+		setTimeout(function() {
+	        	settime(obj) }
+		,1000)
+	}
+}
+$(".getCode").click(function(){
+	invokeSettime(".getCode");
+})
+
+
+
+39.禁止右键查看源代码，F12：
+<script type="text/javascript">
+	function stop(){
+	    // javascript:layer.msg('\u6b22\u8fce\u5149\u4e34\u672c\u7ad9', {icon:6, shade: 0.5, time:1000});
+	    return false;
+	}
+	document.oncontextmenu=stop;
+	document.onkeydown=function(e){
+	    var theEvent = window.event || e;
+	    if(theEvent.keyCode==123){
+	    	theEvent.keyCode=0;
+	    	theEvent.returnValue=false;
+	    	return false
+	    }
+	};
+</script>
+
+
+40.滚动广告：
+.ad_box{
+	overflow: hidden;
+	background: #fff;
+	padding: 10px;
+}
+.ad_box .ad_img{
+	float: left;
+	margin-top:5px;
+}
+.ad_box .ad_img img{
+	display: block;
+	width: 55px;
+	height: 33px;
+}
+.ad_box .into_img{
+	float: left;
+	margin-top:10px;
+}
+.ad_box .into_img img{
+	display: block;
+	width: 20px;
+	height: 20px;
+}
+.ad_box .line{
+	float: left;
+	width: 75%;
+	height: 50px;
+	overflow: hidden;
+	padding: 0 1% 0 4%;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+.ad_box .line li{
+	height:50px;
+	font-size:12px; 
+}
+.ad_box .line li h4{
+	color: #474747;
+	font-size: 14px;
+	height: 20px;
+	line-height: 20px;
+	font-weight: normal;
+	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.ad_box .line li p{
+	color: #747474;
+	font-size: 12px;
+	height: 20px;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
+<div class="ad_box">
+  <div class="ad_img"><img src="images/ad_img.png" alt=""></div>
+  <ul class="line">
+    <li style="margin-top: 0px; "><h4>去除眼部皱纹的小妙招 你一定不知道</h4><p>眼部是最容易出现皱纹的部位，而且也是女生在护肤...</p></li>
+    <li style="margin-top: 0px; "><h4>去除眼部皱纹的小妙招 你一定不知道</h4><p>眼部是最容易出现皱纹的部位，而且也是女生在护肤...</p></li>
+    <li style="margin-top: 0px; "><h4>去除眼部皱纹的小妙招 你一定不知道</h4><p>眼部是最容易出现皱纹的部位，而且也是女生在护肤...</p></li>
+  </ul>
+  <div class="into_img"><img src="images/into.png" alt=""></div> 
+</div>
+
+<script type="text/javascript">
+  $.fn.extend({
+    "slideUp":function(value){
+      
+      var docthis = this;
+      //默认参数
+      value=$.extend({
+         "li_h":"50",
+         "time":2000,
+         "movetime":1000
+      },value)
+      
+      //向上滑动动画
+      function autoani(){
+        $("li:first",docthis).animate({"margin-top":-value.li_h},value.movetime,function(){
+          $(this).css("margin-top",0).appendTo(".line");
+        })
+      }
+      
+      //自动间隔时间向上滑动
+      var anifun = setInterval(autoani,value.time);
+      
+      //悬停时停止滑动，离开时继续执行
+      $(docthis).children("li").mouseover(function(){
+        clearInterval(anifun);      //清除自动滑动动画
+      },function(){
+        anifun = setInterval(autoani,value.time); //继续执行动画
+      })
+    } 
+  })
+
+  $(".line").slideUp();
+</script>
+
+
+41.弹窗阴影box-shadow：
+html:
+
+<div class="box_shadow"></div>
+
+css:
+
+.box_shadow{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,.5);
+	left: 0;
+	top: 0;
+	z-index: 25;
+	display: none;
+}
+.box_shadow.active{
+	display: block;
+}
+
+js:
+
+$(".box_shadow").click(function(){
+	$(this).removeClass("active");
+})
+
+
+
+42.固定二级导航:
+html:
+<ul class="list">
+	<li>相关企业
+		<ul class="tab_list">
+			<li><a href="http://www.yhtscs.com" target="_blank">怡汇通</a></li>
+		</ul>
+	</li>
+</ul>
+
+css:
+.list li{
+	width: 1.16rem;
+	height: .3rem;
+	line-height: .3rem;
+	text-align: center;
+	border: 1px solid #A4A5A6;
+	color: #fff;
+	font-size: .14rem;
+	position: relative;
+}
+.list > li{
+	margin-top: .12rem;
+}
+.list > li::after{
+	content: "";
+	display: inline-block;
+	width: .12rem;
+	height: .12rem;
+	background: url(../images/add.jpg) right center no-repeat;
+}
+.list li .tab_list{
+	position: absolute;
+	left: -.01rem;
+	bottom: 0;
+	display: none;
+	margin-bottom: .29rem;
+}
+.list li:hover .tab_list{
+	display: block;
+}
+.list li:hover::after{
+	background: url(../images/three.jpg) right center no-repeat;
+}
+.list li .tab_list li{
+	background: #f9f9f9;
+	border: 1px solid #E9E6E6;
+	overflow: hidden;
+}
+.list li .tab_list li a{
+	display: block;
+	width: 1.16rem;
+	height: .3rem;
+	color: #f0831e;
+	font-size: .14rem;
+}
+
+
+43.base64 图片预览：
+<img src="" id="preview"/>
+<input type="file" class="file" name="" onchange="imgPreview(this)">
+
+function imgPreview(fileDom){
+    //判断是否支持FileReader
+    if (window.FileReader) {
+        var reader = new FileReader();
+    } else {
+        alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+    }
+
+    //获取文件
+    var file = fileDom.files[0];
+    var imageType = /^image\//;
+    //是否是图片
+    if (!imageType.test(file.type)) {
+        alert("请选择图片！");
+        return;
+    }
+    //读取完成
+    reader.onload = function(e) {
+        //获取图片dom
+        var img = document.getElementById("preview");
+        //图片路径设置为读取的图片
+    	img.style.display = "block";
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+
+
+44.加载更多：
+var _content = []; //临时存储li循环内容
+		var jq22 = {
+			_default:6, //默认显示图片个数
+			_loading:3,  //每次点击按钮后加载的个数
+			init:function(){
+				var lis = $(".join_ul li");
+				$(".join_ul.list").html("");
+				for(var n=0;n<jq22._default;n++){
+					lis.eq(n).appendTo(".join_ul");
+				}
+				// $(".jq22 ul.list img").each(function(){
+				// 	$(this).attr('src',$(this).attr('realSrc'));
+				// })
+				for(var i=jq22._default;i<lis.length;i++){
+					_content.push(lis.eq(i));
+				}
+				$(".join_ul.hidden").html("");
+			},
+			loadMore:function(){
+				var mLis = $(".join_ul li").length;
+				for(var i =0;i<jq22._loading;i++){
+					var target = _content.shift();
+					if(!target){
+						$('.second .more').html("全部加载完毕...");
+						break;
+					}
+					$(".join_ul.list").append(target);
+					// $(".jq22 ul.list img").eq(mLis+i).each(function(){
+					// 	$(this).attr('src',$(this).attr('realSrc'));
+					// });
+				}
+			}
+		}
+		jq22.init();
+
+		$(".second .more").click(function(){
+			jq22.loadMore();
+		})

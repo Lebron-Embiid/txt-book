@@ -1,0 +1,64 @@
+﻿
+//调取方式 
+
+<a href="http://member.cri.cn/oauth/wx?returnUrl=http://ge.cri.cn/login">微信登录</a>
+
+<a href="http://member.cri.cn/oauth/qq?returnUrl=http://ge.cri.cn/login">QQ登录</a>
+
+<a href="http://member.cri.cn/oauth/weibo?returnUrl=http://ge.cri.cn/login">QQ登录</a>
+
+
+
+//获取第三方数据
+
+function sanLOgin(success){
+     
+	$.ajax({
+      dataType: "json",
+      
+	url: 'http://member.cri.cn/service/wai',
+      
+	xhrFields: {
+          withCredentials: true
+        },
+      
+	type: 'GET',
+      
+	success: function(data) {
+           
+		console.log(data)
+           
+		success && success(data);
+      
+	}
+    
+})
+}
+
+
+//解绑第三方 
+
+function ubuding(success){
+     
+	$.ajax({
+            
+		dataType: "json",
+            
+		url: 'http://member.cri.cn/service/logout',
+            
+		xhrFields: {
+                
+			withCredentials: true
+              
+		},
+            
+		type: 'GET',
+            
+		success: function(data) {
+                  
+			success && success();
+            
+		}
+     
+})
+}

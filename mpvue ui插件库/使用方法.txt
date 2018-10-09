@@ -1,0 +1,22 @@
+Vant Weapp：
+1.下载源码（https://github.com/youzan/vant-weapp）
+2.复制dist文件夹到项目中（文档：https://youzan.github.io/vant-weapp/#/quickstart）
+3.在需要使用组件的页面写入：
+"usingComponents": {
+  "van-button": "/path/to/vant-weapp/dist/button/index"
+}
+
+iVew-weapp：
+1.下载源码（https://github.com/TalkingData/iview-weapp）
+2.复制dist文件夹到项目中（文档：https://weapp.iviewui.com/docs/guide/start）
+3.在需要使用组件的页面写入：
+"usingComponents": {
+  "i-button": "../../dist/button/index"
+}
+
+WeUI：
+
+
+
+1.下载源码（https://github.com/Tencent/weui-wxss）
+2.复制dist文件夹到项目中（文档：http://www.runoob.com/w3cnote/weui-for-weixin-web.html  或  https://github.com/Tencent/weui.js/blob/master/docs/README.md）

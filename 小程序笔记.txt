@@ -1,0 +1,1792 @@
+引入：
+const app = getApp();
+
+import util from '../../utils/util'
+
+接口api:
+  /**
+ * 求职反馈
+ */
+  JobFeedback() {
+    return this.request.get('api/index/jobs_feedback', {
+      uid: getApp().getUser('uid'),
+    })
+  } 
+
+替换接口数据：
+//todo: jobs_name 职位  company_name 公司名称  date 日期  feedbackArr 查看状态
+let orderList = [];
+    
+app.api.JobFeedback().then(res => {
+      
+	let orders = res.data.apply_list.list;
+      
+	for(var i in orders){
+        
+		var item = orders[i];
+         
+		var xinzi = item.minwage / 1000 + 'k-' + item.maxwage / 1000 + 'k';
+		orderList.push({
+          
+			headImg: 'http://win2.qbt8.com/ycw/data/upload/avatar/' + item.avatars,
+			title: item.jobs_name,
+          
+			company: item.company_name,
+          
+			time: util.formatTime(new Date(item.dateline * 1000)),
+			price: item.negotiable == 1 ? '面议' : xinzi
+		})
+      
+	}
+      
+	this.setData({
+        
+		orderArr: orderList
+      
+	})
+    
+})
+
+
+数组索引绑定：
+<view class='photo'>
+
+	<image src='/images/photo.jpg' class='add-photo' bindtap='addPhoto'></image>
+
+	<view class='photo-item' wx:for='{{addImgs}}' wx:for-item="item" wx:key="*this">
+
+          	<image src='{{item}}' data-index="{{index}}" mode='aspectFill'></image>
+          
+		<icon type='clear' size='20' data-index="{{index}}" color='red' bindtap='clearPhoto'></icon>
+        
+	</view>
+    
+</view>
+
+更改页面title：
+"navigationBarTitleText": "搜索",
+"enablePullDownRefresh": false
+
+获取点击元素的属性：（id）
+var id = e.currentTarget.dataset.id;
+
+返回
+wx.navigateBack({
+      delta: 1
+    })
+
+轮播：
+wxml:
+<swiper class='index-banner' indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" height="{{bannerHeight}}" indicator-color='{{indicatorColor}}' indicator-active-color='{{indicatorColorActive}}' circular="{{circular}}">
+    
+	<block wx:for="{{imgUrls}}" wx:key>
+      
+		<swiper-item>
+        
+			<image src="{{item.image}}" class="slide-image" width="100%" height="{{bannerHeight}}"/>
+      
+		</swiper-item>
+    
+	</block>
+  
+</swiper>
+
+js:
+imgUrls: [
+      
+{ 
+	image: "/images/banner2.png" },
+      
+	{ image: "/images/banner1.png" }
+    
+],
+    
+bannerHeight: 220,
+    
+indicatorColor: '#916542',
+   
+indicatorColorActive: '#ed6623',
+    
+indicatorDots: true,
+    
+autoplay: true,
+    
+direction: true,
+    
+page: 0,
+    
+interval: 5000,
+    
+duration: 800,
+    
+circular: true,
+
+
+picker：
+<picker bindchange="bindTypeChange" class="pick-box pickType" range-key="info" range="{{typeLists}}">
+  
+	<view class='right-type'>
+		{{typeInfo}}<image src='/images/into.png' class='type-img'></image>
+	</view>
+  
+</picker>
+
+bindTypeChange: function (e) {
+    
+	var id = e.detail.value;
+    
+	var info = this.data.typeLists[id].info;
+    
+	this.setData({
+      
+		i:id,
+      
+		typeInfo: info
+    
+	});
+  
+}
+
+
+跳转到：
+wx.navigateTo({
+  url: 'test?id=1'
+})
+
+
+//暂无数据：
+wxml:
+<template name="nodata">
+  <view class='blank16'></view>
+  <view class="weui-loadmore weui-loadmore_line">
+    <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无数据</view>
+  </view>
+</template>
+
+//其他页面调用模版
+<template is="nodata" wx:else />
+
+wxss:
+.weui-loadmore {
+  width: 65%;
+  margin: 1.5em auto;
+  line-height: 1.6em;
+  font-size: 14px;
+  text-align: center;
+}
+
+.weui-loadmore_line {
+  border-top: 1px solid #e5e5e5;
+  margin-top: 2.4em;
+}
+
+.weui-loadmore__tips {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.weui-loadmore__tips_in-line {
+  position: relative;
+  top: -0.9em;
+  padding: 0 0.55em;
+  background-color: #fff;
+  color: #999;
+}
+
+
+
+筛选：
+ /**
+ 获取职位列表 **/
+  jobs_all (p,type, district_cn, keyword, experience_id, education_id, sex, date, wage_id, tag_id, nature_id) {
+    return this.request.get('api/index/jobs_all', {
+      p: p ? p : 1,
+      type: type ? type : 1,
+      district_cn: district_cn ? district_cn : '',
+      keyword: keyword ? keyword : '',
+      experience_id: experience_id ? experience_id : '',
+      education_id: education_id ? education_id : '',
+      sex: sex ? sex : '',
+      date: date ? date : '',
+      wage_id: wage_id ? wage_id : '',
+      tag_id: tag_id ? tag_id : '',
+      nature_id: nature_id ? nature_id : ''
+    })
+  }
+
+data:{
+	filterArr:[
+      { select: 0, id: 0, title: "经验", time: ["不限"], show: false, img: "/images/select_up.png" },
+      { select: 0, id: 1, title: "期望薪资", time: ["不限"], show: false, img: "/images/select_up.png" },
+      { select: 0, id: 2, title: "工作性质", time: ["不限"], show: false, img: "/images/select_up.png" },
+      { select: 0, id: 3, title: "学历要求", time: ["不限"], show: false, img: "/images/select_up.png" },
+      { select: 0, id: 4, title: "福利待遇", time: [{ txt: "不限", start: 1 }], show: false, img: "/images/select_up.png" },
+      { select: 0, id: 5, title: "行业", time: ["不限"], show: false, img: "/images/select_up.png" },
+      { select: 0, id: 6, title: "更新时间", time: ["3天内", "7天内", "15天内", "30天内"], show: false, img: "/images/select_up.png" }
+    ]
+}
+
+app.api.jobs_all(options.type, options.district_cn, options.keyword).then(res => {
+      
+	console.log(res.data);
+      
+	var lists = res.data;
+      
+	var filterList = [lists.experience, lists.salary, lists.nature, lists.education, lists.welfare, lists.industry];
+      
+	// var filterArr = [];
+      
+	for(var j in filterList){
+        
+		for (var i in filterList[j]) {
+          
+			if(j!=4){
+            
+				self.data.filterArr[j].time.push(filterList[j][i].c_name);
+          
+			}else{
+            
+				self.data.filterArr[j].time.push({
+              
+					txt: filterList[j][i].c_name,
+              
+					start: filterList[j][i].c_note
+            
+				}) 
+          
+			}
+        
+		}
+      
+	}
+      
+	console.log(self.data.filterArr);
+      
+	self.setData({
+        
+		filterArr: self.data.filterArr
+      
+	})
+    
+})
+
+
+上拉加载，下拉刷新：
+const api = getApp().api;
+data: {
+    recruitArr: [],
+    p:1,
+    totalP: ''
+  },
+onload:function(options){
+	
+wx.showLoading({title: 'loading...'})
+	var self = this;
+      
+	api.jobs_all().then(function (res) {
+      
+		let recruits=[];
+      
+		var joblist=res.data.list;
+      
+		for(var item in joblist){
+        
+			var xinzi = joblist[item].minwage / 1000 + 'K-' + joblist[item].maxwage / 1000 + 'K';
+        
+			recruits.push({
+          
+				id: joblist[item].id,
+          
+				job: joblist[item].jobs_name,
+          
+				company: joblist[item].companyname,
+          
+				address: joblist[item].district_cn,
+          
+				year: joblist[item].experience_cn,
+          
+				school: joblist[item].education_cn,
+          
+				price: joblist[item].negotiable == 1 ? '面议' : xinzi
+        
+			})
+      
+		}
+      
+		self.setData({
+        
+			recruitArr: recruits,
+        
+			totalP: Math.ceil(parseFloat(res.data.count) / parseFloat(res.data.list.length))
+      
+		})
+    
+	})
+	wx.hideLoading()
+}
+
+下拉刷新：
+onPullDownRefresh: function () {
+    
+	var self = this;
+    
+	wx.showToast({
+      
+		title: '正在加载',
+      
+		icon: 'loading'
+    
+	})
+    
+	api.jobs_all(1).then(function (res) {
+      
+		let recruits = [];
+      
+		var joblist = res.data.list;
+      
+		for (var item in joblist) {
+        
+			var xinzi = joblist[item].minwage / 1000 + 'K-' + joblist[item].maxwage / 1000 + 'K';
+        
+			recruits.push({
+          
+				id: joblist[item].id,
+          
+				job: joblist[item].jobs_name,
+          
+				company: joblist[item].companyname,
+          
+				address: joblist[item].district_cn,
+          
+				year: joblist[item].experience_cn,
+          
+				school: joblist[item].education_cn,
+          
+				price: joblist[item].negotiable == 1 ? '面议' : xinzi
+        
+			})
+      
+		}
+      
+		self.setData({
+        
+			recruitArr: recruits,
+        
+			p:1
+      
+		})
+      
+		if (res.status == 1) {
+        
+			setTimeout(function () {
+          
+				wx.stopPullDownRefresh();
+          
+				wx.showToast({
+            
+					title: '加载成功',
+          
+				})
+        
+			}, 1000)
+      
+		}
+    
+	})
+    
+	wx.stopPullDownRefresh();
+  
+},
+
+上拉触底事件：
+onReachBottom: function () {
+    
+
+    	wx.showLoading({
+      
+		title: '加载中',
+    
+	})
+	var self = this;
+    
+	var p = self.data.p;
+    
+	p++;
+    
+	if (p > self.data.totalP) {
+      
+		wx.showToast({
+        
+			title: '没有数据了',
+        
+			icon: 'none'
+      
+		})
+      
+		wx.hideNavigationBarLoading();
+      
+		return false;
+    
+	}
+    
+	wx.showNavigationBarLoading();
+    
+	let recruits = self.data.recruitArr;
+    
+	api.jobs_all(p).then(function (res) {
+      
+		var joblist = res.data.list;
+      
+		for (var item in joblist) {
+        
+			var xinzi = joblist[item].minwage / 1000 + 'K-' + joblist[item].maxwage / 1000 + 'K';
+        
+			recruits.push({
+          
+				id: joblist[item].id,
+          
+				job: joblist[item].jobs_name,
+          
+				company: joblist[item].companyname,
+          
+				address: joblist[item].district_cn,
+          
+				year: joblist[item].experience_cn,
+          
+				school: joblist[item].education_cn,
+          
+				price: joblist[item].negotiable == 1 ? '面议' : xinzi
+        
+			})
+        
+			self.setData({
+          
+				recruitArr: recruits,
+          
+				p: p
+        
+			})
+      
+		}
+      
+		if (res.status == 1) {
+        
+			setTimeout(function () {
+          
+				wx.hideNavigationBarLoading()
+        
+			}, 1000)
+      
+		}
+    
+	})
+    
+	wx.hideNavigationBarLoading()
+;
+	wx.hideLoading();
+},
+
+
+
+
+
+选项卡：
+
+
+<view wx:for="{{navbar}}" data-idx="{{index}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">
+	{{item.name}} <text wx:if="{{ index == 0}}">({{num}})</text>
+</view>
+<view class='nav-box' hidden="{{currentTab!=0}}">
+    
+  </view> 
+  
+
+<view class='nav-box' hidden="{{currentTab!=1}}">
+    
+  </view> 
+  
+<view class='nav-box' hidden="{{currentTab!=2}}">
+    
+  </view> 
+
+currentTab:0,num:0,
+    navbar:[
+      {name:"公司主页"},
+      {name:"在招职位"}
+    ]
+
+navbarTap: function (e) {
+    this.setData({
+      currentTab: e.currentTarget.dataset.idx
+    })
+  }
+
+
+
+单击单项或多项，循环切换class：
+html:
+<view class='message-item' wx:for="{{messageArr}}" wx:key="">
+    
+	<view class="big {{item.show == index ? 'active':''}}" bindtap='showSmall' data-idx='{{index}}'>
+         
+		<view class='minfo'>
+        
+			<text class='mtitle'>{{item.name}}申请了您发布的职位：【{{item.job}}】</text>
+		</view>
+         
+	</view>
+    
+	<view class="small {{item.show == 1 ? 'active':''}}">
+      
+		{{item.name}}申请了您发布的职位：{{item.job}}，请您查看，<navigator url='{{item.url}}'>点击查看>></navigator>
+    
+	</view>
+  
+</view>
+
+js:
+messageArr:[
+      
+	{
+         
+		name: "张美琪",
+        
+		job: "UI设计师",
+       
+		show: 0
+      
+	},
+      
+	{
+       
+		name: "张美琪",
+        
+		job: "UI设计师",
+	 
+		show: 0
+      
+	}
+    
+],
+
+showSmall: function(e){
+    
+	var that = this;
+    
+	var idx = e.currentTarget.dataset.idx;
+    
+	if (that.data.messageArr[idx].show == 0){
+      
+		that.data.messageArr[idx].show = 1;
+    
+	}else{
+      
+		that.data.messageArr[idx].show = 0;
+    
+	}
+    
+	var index = that.data.messageArr[idx].index;
+
+	console.log(index)
+    
+	that.setData({
+      
+		messageArr: that.data.messageArr
+    
+	})
+  
+}
+
+
+
+链接跳转传值，并且跳转页面接收：
+wx.navigateTo({  
+  url: '/pages/account/feedback/feedback?test=feedback_test&name=jia',  
+  success: function(res) {},  
+  fail: function(res) {},  
+  complete: function(res) {},  
+}) 
+
+onLoad: function (e) {  
+    var movieid = getApp().requestId;  
+    var movieIndex = getApp().requestIndex;  
+    console.log("-----feedback--movieid--" + movieid +" " + movieIndex);  
+    console.log("-----feedback--test--" + e.test);  
+    console.log("-----feedback--name--" + e.name);  
+  },
+
+
+动画：
+wxml:
+<view bindtap='showLayer'></view>
+<view class='wrapper' bindtap='cancleLayer' animation="{{animationData}}"></view>
+
+wxss:
+.wrapper{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  bottom: -100%;
+  z-index: 5;
+  background: rgba(0,0,0,0.75);
+}
+
+js:
+data:{
+	animationData: {}
+},
+  showLayer(e){
+    var animation = wx.createAnimation({
+      transformOrigin: "50% 50%",
+      duration: 500,
+      timingFunction: 'ease',
+      delay: 0
+    })
+    this.animation = animation;
+    animation.bottom(0).step();
+    this.setData({
+      animationData: animation.export()
+    })
+  },
+  cancleLayer(e){
+    this.animation.bottom('-100%').step();
+    this.setData({
+      animationData: this.animation.export()
+    })
+  },
+
+
+横向滑动导航：
+wxml:
+<view class='index-nav'>
+  
+	<scroll-view class='nav-scroll' scroll-x>
+    
+		<view class='scroll-view-item {{scrollTab == index ? "active":""}}' data-id='{{index}}' bindtap='changeScrollTab' wx:for="{{navArr}}" wx:key="">{{item.name}}</view>
+  
+	</scroll-view>
+  
+</view>
+
+wxss:
+.index-nav{
+  width: 100%;
+  height: 88rpx;
+  position: fixed;
+  left: 0;
+  top: 88rpx;
+  background: #fff;
+  overflow: hidden;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  z-index: 100;
+}
+.nav-scroll{
+  display: block;
+  width: 100%;
+  height: 88rpx;
+  overflow: hidden;
+  white-space: nowrap;	//必要
+}
+.scroll-view-item{
+  margin-right: 50rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  display: inline-block;
+  color: #b9bcc1;
+  font-size: 32rpx;
+  position: relative;
+}
+.scroll-view-item:last-child{
+  margin-right: 0;
+}
+.scroll-view-item.active{
+  color: #262626;
+  font-size: 32rpx;
+}
+.scroll-view-item.active::after{
+  content: "";
+  width: 40rpx;
+  height: 6rpx;
+  background: #fe4849;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  bottom: 0;
+  border-radius: 50rpx;
+}
+
+data:
+navArr:[
+      
+	{ name: "福建漳州" },
+      
+	{ name: "四川乐山" },
+      
+	{ name: "云南普洱" },
+      
+	{ name: "浙江三门" }
+    
+],
+
+
+
+小程序scroll-view 纵向，点击滑动页面：
+wxml:
+<view class="nav-item" data-idx='{{index}}' data-id="{{'index'+index}}" wx:for="{{navTab}}" wx:key='' bindtap='changeNavTap'>{{item.name}}</view>
+<scroll-view class='mt90' style="height: 100%;" scroll-y="true" scroll-into-view="{{slideTop}}" scroll-with-animation="true">
+	<view id="index0"></view>
+	<view id="index1"></view>
+	<view id="index2"></view>
+</scroll-view>
+
+wxss:
+page{
+	height:100%;
+}
+
+js:
+data{
+	addActive:0,
+	slideTop:'',
+	navTab:[
+      {name:"商品"},
+      {name:"详情"},
+      {name:"评价"}
+    ],
+}
+
+changeNavTap(e){
+	let id = e.currentTarget.dataset.id;
+    
+	this.setData({
+      
+		addActive: e.currentTarget.dataset.idx,
+      
+		slideTop: id
+    
+	})
+}
+
+
+小程序picker-view省市区三级联动：
+wxml:
+    <view class='right'>
+      <view class='right-type' bindtap="translate">
+        {{province}} {{city}} {{county}}<image src='/images/down.png' class='type-img'></image>
+      </view>
+      <view class="animation-element-wrapper" animation="{{animation}}" style="visibility:{{show ? 'visible':'hidden'}}" bindtap="hiddenFloatViewNO" data-id="444">
+        <view class="animation-element" catchtap="nono">
+          <text class="left-bt" catchtap="hiddenFloatViewNO" data-id="555">取消</text>
+          <text class="right-bt" catchtap="hiddenFloatViewOK" data-id="666">确定</text>
+            <view class="pvline"></view> 
+          <picker-view indicator-style = "height: 50rpx;" value="{{value}}" bindchange="bindChange" catchtap="nono">
+            <!--省-->
+            <picker-view-column>
+              <view wx:for="{{provinces}}" wx:for-item="sheng" wx:key="">
+                {{sheng.name}}
+              </view>
+            </picker-view-column>
+            <!--地级市-->
+            <picker-view-column>
+              <view wx:for="{{citys}}" wx:key="">
+                {{item.name}}
+              </view>
+            </picker-view-column>
+            <!--区县-->
+            <picker-view-column>
+              <view wx:for="{{countys}}" wx:key="">
+                {{item.name}}
+              </view>
+            </picker-view-column>
+          </picker-view>    
+        </view>
+      </view>
+    </view>
+
+wxss:
+picker-view{
+  background-color: white;
+  padding: 0;
+  width: 100%; 
+  height: 380rpx;
+  bottom: 0;
+  position: fixed;
+  left: 0;
+  z-index: 50;
+}
+
+picker-view-column view{
+  vertical-align:middle; 
+  font-size: 28rpx;
+  line-height: 28rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.animation-element-wrapper {
+  display: flex;  
+  position: fixed;
+  left: 0;
+  top:0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 20;
+}
+.animation-element {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 470rpx;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 1);
+}
+.left-bt,.right-bt{
+  color: #999999;
+  display: inline-flex;  
+  position: fixed;
+  margin-top: 20rpx;
+  height: 50rpx;
+  text-align: center;
+  line-height: 50rpx;
+  font-size: 34rpx;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.left-bt{
+  left: 30rpx;
+}
+.right-bt {
+  right: 30rpx;
+  color: #e95412;
+}
+
+.pvline{
+  display: block;
+  position: fixed;
+  height: 1rpx;
+  width: 100%;
+  margin-top: 89rpx; 
+  background-color: #eeeeee;
+}
+
+js:
+// pages/job/job.js
+var area = require('../../utils/area.js')
+
+var areaInfo = [];//所有省市区县数据
+
+var provinces = [];//省
+
+var citys = [];//城市
+
+var countys = [];//区县
+
+var index = [0, 0, 0];
+
+var cellId;
+
+var t = 0;
+var show = false;
+var moveY = 200;
+
+data:{
+    show: show,
+    provinces: provinces,
+    citys: citys,
+    countys: countys,
+    value: [0, 0, 0],
+
+    save_province: "北京市",
+    save_city: "市辖区",
+    save_county: "东城区",
+}
+
+onLoad: function (options) {
+    cellId = options.cellId;
+    var that = this;
+    var date = new Date()
+    console.log(date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日");
+
+    //获取省市区县数据
+    area.getAreaInfo(function (arr) {
+      areaInfo = arr;
+      //获取省份数据
+      getProvinceData(that);
+    });
+  },
+onReady: function () {
+    this.animation = wx.createAnimation({
+      transformOrigin: "50% 50%",
+      duration: 0,
+      timingFunction: "ease",
+      delay: 0
+    }
+    )
+    this.animation.translateY(200 + 'vh').step();
+    this.setData({
+      animation: this.animation.export(),
+      show: show
+    })
+  },
+//移动按钮点击事件
+  translate: function (e) {
+    if (t == 0) {
+      moveY = 0;
+      show = false;
+      t = 1;
+    } else {
+      moveY = 200;
+      show = true;
+      t = 0;
+    }
+    // this.animation.translate(arr[0], arr[1]).step();
+    animationEvents(this, moveY, show);
+
+  },
+//滑动事件
+  bindChange: function (e) {
+    var val = e.detail.value
+    console.log(e.detail.value)
+    //判断滑动的是第几个column
+    //若省份column做了滑动则定位到地级市和区县第一位
+    if (index[0] != val[0]) {
+      val[1] = 0;
+      val[2] = 0;
+      getCityArr(val[0], this);//获取地级市数据
+      getCountyInfo(val[0], val[1], this);//获取区县数据
+    } else {    //若省份column未做滑动，地级市做了滑动则定位区县第一位
+      if (index[1] != val[1]) {
+        val[2] = 0;
+        getCountyInfo(val[0], val[1], this);//获取区县数据
+      }
+    }
+    index = val;
+
+    // console.log(index + " => " + val);
+
+    //更新数据
+    this.setData({
+      value: [val[0], val[1], val[2]],
+      save_province: provinces[val[0]].name,
+      save_city: citys[val[1]].name,
+      save_county: countys[val[2]].name
+    })
+
+  },
+  //隐藏弹窗浮层
+  hiddenFloatViewNO(e){
+    console.log(this.data.province, this.data.city, this.data.county);
+    moveY = 200;
+    show = true;
+    t = 0;
+    animationEvents(this, moveY, show);
+  },
+  //隐藏弹窗浮层
+  hiddenFloatViewOK(e) {
+    console.log(e);
+    moveY = 200;
+    show = true;
+    t = 0;
+    animationEvents(this, moveY, show);
+
+    this.setData({
+      province: this.data.save_province,
+      city: this.data.save_city,
+      county: this.data.save_county
+    })
+  },
+
+//动画事件
+function animationEvents(that, moveY, show) {
+  console.log("moveY:" + moveY + "\nshow:" + show);
+  that.animation = wx.createAnimation({
+    transformOrigin: "50% 50%",
+    duration: 400,
+    timingFunction: "ease",
+    delay: 0
+  }
+  )
+  that.animation.translateY(moveY + 'vh').step()
+
+  that.setData({
+    animation: that.animation.export(),
+    show: show
+  })
+
+}
+
+// ---------------- 分割线 ---------------- 
+
+//获取省份数据
+function getProvinceData(that) {
+  var s;
+  provinces = [];
+  var num = 0;
+  for (var i = 0; i < areaInfo.length; i++) {
+    s = areaInfo[i];
+    if (s.di == "00" && s.xian == "00") {
+      provinces[num] = s;
+      num++;
+    }
+  }
+  that.setData({
+    provinces: provinces
+  })
+
+  //初始化调一次
+  getCityArr(0, that);
+  getCountyInfo(0, 0, that);
+  that.setData({
+    province: that.data.save_province,
+    city: that.data.save_city,
+    county: that.data.save_county,
+  })
+}
+
+// 获取地级市数据
+function getCityArr(count, that) {
+  var c;
+  citys = [];
+  var num = 0;
+  for (var i = 0; i < areaInfo.length; i++) {
+    c = areaInfo[i];
+    if (c.xian == "00" && c.sheng == provinces[count].sheng && c.di != "00") {
+      citys[num] = c;
+      num++;
+    }
+  }
+  if (citys.length == 0) {
+    citys[0] = { name: '' };
+  }
+
+  that.setData({
+    // city: "",
+    citys: citys,
+    // value: [count, 0, 0]
+  })
+}
+
+// 获取区县数据
+function getCountyInfo(column0, column1, that) {
+  var c;
+  countys = [];
+  var num = 0;
+  for (var i = 0; i < areaInfo.length; i++) {
+    c = areaInfo[i];
+    if (c.xian != "00" && c.sheng == provinces[column0].sheng && c.di == citys[column1].di) {
+      countys[num] = c;
+      num++;
+    }
+  }
+  if (countys.length == 0) {
+    countys[0] = { name: '' };
+  }
+  that.setData({
+    // county: "",
+    countys: countys,
+    // value: [column0, column1, 0]
+  })
+}
+
+小程序picker省市区三级联动：
+wxml:
+<picker mode="multiSelector" bindchange="bindAreaMultiPickerChange"
+ bindcolumnchange="bindAreaMultiPickerColumnChange" value="{{areaMultiIndex}}" range="{{areaMultiArray}}"
+ range-key="name">
+ 
+	<view class="right-type">
+ {{areaId?areaMultiArray[0][areaMultiIndex[0]].name+'，'+areaMultiArray[1][areaMultiIndex[1]].name:'请选择'}}
+          
+		<image src='/images/down.png' class='type-img'></image>
+        
+	</view>
+      
+</picker>
+
+js:
+//工作地区相关
+    
+areaId: 0,
+    
+areaMultiArray: [
+      
+	// [{'id': 1, 'name': '北京'}, {'id': 2, 'name': '广东省'}],
+      
+	// [{'id': 11, 'name': '北京市'}],
+    
+],
+    
+areaObjectMultiArray: {
+      
+	// 0: [],
+      
+	// 10: [],
+    
+},
+    
+areaMultiIndex: [
+      0, 0
+    ],
+
+onload:{
+	//处理地区数据，[parentId:{id:'',name:''}]
+      
+	let areas = []
+      
+	for (let i in res.data.category_district) {
+        
+		let item = res.data.category_district[i]
+        
+		let parentId = item.parentid
+        
+		if (areas[parentId]) {
+          
+			areas[parentId].push({'id': item.id, 'name': item.categoryname})
+        
+		} else {
+          
+			areas[parentId] = [{'id': item.id, 'name': item.categoryname}]
+        
+		}
+      
+	}
+      
+	//生成三级联动用数据格式
+      
+	let areaGroup = []
+      
+	let areaGroupLevel1 = []
+      
+	let areaGroupLevel2 = []
+      
+	for (let i in res.data.category_district) {
+        
+		let item = res.data.category_district[i]
+        
+		let parentId = parseInt(item.parentid)
+        
+		if (parentId === 0) {
+          
+			areaGroupLevel1.push({'id': item.id, 'name': item.categoryname})
+        
+		} else {
+          
+			areaGroupLevel2.push({'id': item.id, 'name': item.categoryname})
+        
+		}
+      
+	}
+      
+	areaGroup[0] = areaGroupLevel1
+      
+	areaGroup[1] = areaGroupLevel2
+
+      
+	that.setData({
+        positionMultiArray: positionGroup,
+        positionObjectMultiArray: positions,
+        areaMultiArray: areaGroup,
+        areaObjectMultiArray: areas,
+      })
+    })
+}
+
+//地区三级联动相关事件
+  
+.bindAreaMultiPickerChange: function (e) {
+    
+	console.log('picker发送选择改变，携带值为', e.detail.value)
+    
+	let areaId = this.data.areaMultiArray[1][e.detail.value[1]].id
+    
+	this.setData({
+      
+		areaMultiIndex: e.detail.value,
+      
+		areaId: areaId
+    
+	})
+    
+	console.log('选中地区id:' + areaId)
+  },
+  
+	bindAreaMultiPickerColumnChange: function (e) {
+    
+		console.log('修改的列为', e.detail.column, '，值为', e.detail.value)
+    
+		let data = {
+      
+			areaMultiArray: this.data.areaMultiArray,
+      
+			areaMultiIndex: this.data.areaMultiIndex
+    
+		}
+    
+		data.areaMultiIndex[e.detail.column] = e.detail.value
+    
+		switch (e.detail.column) {
+      
+			//选中 省
+      
+			case 0:
+        
+			let provinceId = this.data.areaMultiArray[0][e.detail.value].id
+        
+			data.areaMultiArray[1] = this.data.areaObjectMultiArray[provinceId]
+        
+			data.areaMultiIndex[1] = 0
+        
+			break
+    
+		}
+    
+		this.setData(data)
+  
+},
+
+
+小程序上传多张图片：
+wxml:
+<view class='upload-view'>
+        
+	<view class="img-box {{tShow == true ? 'active':''}}" wx:for="{{picLists}}" wx:key="" >
+          
+		<image src='{{item}}' data-id="{{index}}" mode='aspectFit'></image>
+          
+		<icon type='clear' size='20' data-index="{{index}}" color='red' bindtap='clearPhoto'></icon>
+        
+	</view>
+        
+	<view class="uv-box {{aShow == true ? 'active':''}}" bindtap='choosePhoto'>
+
+		<view><text>+</text>上传图片</view>
+        
+	</view>
+      
+</view>
+
+wxss:
+
+.upload-view .uv-box video,.upload-view .uv-box image{
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+.upload-view .uv-box video.active,.upload-view .uv-box image.active{
+  display: block;
+}
+.upload-view .uv-box view.active{
+  display: none;
+}
+
+.photo-item .upload-view .img-box{
+  float: left;
+  width: 220rpx;
+  height: 220rpx;
+  display: none;
+  box-sizing: border-box;
+  margin: 0 10rpx 10rpx 0;
+  border: 1rpx solid #CFCFCF;
+  position: relative;
+}
+.photo-item .upload-view .img-box icon{
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+}
+.photo-item .uv-box{
+  float: left;
+}
+.photo-item .uv-box.active{
+  display: none;
+}
+.photo-item .upload-view .img-box.active{
+  display: block;
+}
+.photo-item .upload-view .img-box image{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+js:
+data:{
+	picLists:[],
+    aShow: false,
+    tShow: false,
+}
+
+//选择单张图片
+chooseImg(e){
+    
+	var that = this;
+    
+	wx.chooseImage({
+      
+		count: 1, // 默认9
+      
+		sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      
+		sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      
+		success: function (res) {
+      
+			// 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        
+			that.setData({
+          
+				picFile: res.tempFilePaths[0],
+			})
+       
+		}
+    
+	})
+  
+},
+//选择多张图片
+choosePhoto(e){
+    
+	var that = this;
+    
+	wx.chooseImage({
+      
+		count: 6, // 默认9
+      
+		sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      
+		sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      
+		success: function (res) {
+        
+		// 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        
+		var len = res.tempFilePaths.length;
+        
+		for(var i=0;i<len;i++){
+          
+			that.data.picLists.push(res.tempFilePaths[i])
+        
+		}
+        
+		var imgs = that.data.picLists.length;
+        
+		console.log(imgs)
+        
+		if (imgs >= 6) {
+          
+			that.data.aShow = true;
+          
+			that.data.picLists.length = 6
+        
+		}else{
+          
+			that.data.aShow = false;
+        
+		}
+        
+		that.setData({
+          
+			picLists: that.data.picLists,
+          
+			tShow: true,
+          
+			aShow: that.data.aShow
+        
+		})
+        
+		console.log(that.data.picLists)
+      
+		}
+    
+	})
+  
+},
+  
+//删除当前照片
+clearPhoto: function (e) {
+    
+	var that = this;
+    
+	wx.showModal({
+      
+		title: '提示',
+      
+		content: '确定删除照片？',
+      
+		success: function (res) {
+        
+			if (res.confirm) {
+          
+				console.log('确定');
+          
+				var imgs = that.data.picLists;
+          
+				var index = e.currentTarget.dataset.index;
+          
+				imgs.splice(index, 1);
+          
+				if (imgs.length < 6) {
+            
+					that.data.aShow = false
+          
+				}
+          
+			that.setData({
+            
+				picLists: imgs,
+            
+				aShow: that.data.aShow
+          
+			});
+        
+			} else if (res.cancel) {
+          
+				console.log('取消')
+        
+			}
+      
+		}
+    
+	})
+  
+},
+//预览图片
+previewImg(e){
+    
+	var id = e.currentTarget.dataset.id;
+	wx.previewImage({
+      
+		current: this.data.picLists[id]', // 当前显示图片的http链接
+      
+		urls: this.data.picLists // 需要预览的图片http链接列表
+    
+	})
+  
+},
+
+
+获取手机验证码倒计时：
+<view class='input-box'>
+	<input name="phone" bindinput='phoneinput' value='' placeholder='请输入手机号'></input>
+</view>
+<view class='input-view'>
+	<input name="phone" placeholder='请输入验证码'></input>
+          
+	<button class="code {{flag == true?'active':''}}" bindtap="getVerificationCode" disabled="{{codeDis}}">{{phoneCode}}</button>
+        
+</view>
+
+wxss:
+.input-box,.input-view{
+  overflow: hidden;
+  padding-bottom: 5rpx;
+  border-bottom: 1rpx solid #E8E8E8;
+  font-size: 26rpx;
+  margin-bottom: 5rpx;
+}
+.input-view{
+  border-bottom: 0;
+}
+.input-view{
+  overflow: hidden;
+  margin-top: 50rpx;
+  border-bottom: 1rpx solid #E8E8E8;
+  padding: 10rpx 0;
+}
+.input-view input{
+  display: block;
+  width: 60%;
+  float: left;
+}
+.code{
+  width: 180rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  border-radius: 50rpx;
+  color: #fff;
+  font-size: 26rpx;
+  background: #e95412;
+  float: right;
+  margin: 0 30rpx 0 0;
+}
+.phone-box .box .code.active{
+  background: #ccc;
+}
+.formsubmit{
+  margin-top: 100rpx;
+  width: 90%;
+  background: #e95412;
+  border-radius: 50rpx;
+  color: #fff;
+  font-size: 34rpx;
+  box-shadow: 0 0 10rpx #eda585;
+}
+
+js:
+var interval = null //倒计时函数
+data:{
+	flag: false,	   codeDis: false,
+    phoneCode: "获取验证码",
+    currentTime: 61,
+    telephone: "",
+    codePhone: ""  , token: ''
+}
+onload: function(options){
+	var token = '';
+    
+	var self = this
+;    
+	api.user_getpass().then(function(res) {
+      
+		self.setData({
+        
+			token: res.data
+      
+		})
+    
+	});
+}
+changeCode() {
+    
+	var that = this;
+    
+	let telephone = that.data.telephone
+    
+	if (telephone.length != 11 || isNaN(telephone)) {
+      
+		wx.showToast({
+        
+			title: '请输入有效的手机号码',
+        
+			icon: "none"
+      
+		})
+      
+		that.setData({
+        
+			codeDis: false
+      
+		})
+      
+		return false
+    
+	}
+    
+	//手机获取验证码接口
+	api.reg_send_sms(telephone, that.data.token).then(function (res) {
+      
+		if (res.status == 1) {
+        
+			wx.showToast({
+          
+				title: res.msg,
+        
+			})
+      
+		}
+    
+	})
+	var currentTime = that.data.currentTime
+    
+	interval = setInterval(function () {
+      
+		currentTime--;
+      
+		that.setData({
+        
+			phoneCode: currentTime + '秒',
+        
+			codeDis: true,
+        
+			flag: true
+		})
+      
+		if (currentTime <= 0) {
+        
+			clearInterval(interval)
+        
+			that.setData({
+          
+				phoneCode: '重新发送',
+          
+				currentTime: 61,
+          
+				codeDis: false
+,
+        
+				flag: false   
+			})
+      
+		}
+    
+	}, 1000)
+  
+},
+  
+getVerificationCode() {
+    this.changeCode();
+  },
+
+
+底部弹出导航：<action-sheet></action-sheet>
+wxml:
+<!--触发action-sheet事件-->
+<button type="primary" bindtap="listenerButton">弹出ActionSheet</button>
+<!--默认action-sheet为隐藏，由button触发-->
+<action-sheet hidden="{{actionSheetHidden}}" bindchange="listenerActionSheet" >
+    <block wx:for-items="{{actionSheetItems}}" > 
+        <action-sheet-item >{{item}}</action-sheet-item>
+    </block>
+    <!--自动隐藏action-sheet-->
+    <action-sheet-cancel>取消</action-sheet-cancel>
+</action-sheet>
+
+js:
+data:{
+	actionSheetHidden: true,
+	actionSheetItems: ['item1', 'item2', 'item3']
+}
+
+listenerButton: function() {
+      this.setData({
+        //取反
+          actionSheetHidden: !this.data.actionSheetHidden
+      });
+  },
+
+  listenerActionSheet:function() {
+    this.setData({
+      actionSheetHidden: !this.data.actionSheetHidden
+    })
+  },
+
+
+
+微信绑定：
+
+var appid = getApp().globalData.appid;
+var secret = getApp().globalData.secret;
+binding_openid:function(){
+    var self=this;
+    wx.showLoading({
+      title: '正在绑定',
+      mask: true,
+    })
+    wx.login({
+      success:function(res){
+        wx.request({
+          url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret+ '&grant_type=authorization_code&js_code=' + res.code,
+          method: 'GET',
+          header: {
+            'content-type': 'application/json'
+          }, 
+          success:function(res){
+            getApp().api.binding_openid(res.data.openid).then(res=>{
+              if(res.status==1){
+                wx.hideLoading();
+                self.setData({
+                  wx_bind:1
+                })
+                wx.showToast({
+                  title: '绑定成功',
+                })
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+
+-----------------------------------------------------------
+小程序接口：
+var json = {
+        
+	is_organization: this.data.is_organization,
+        
+	companyname: this.data.companyname,
+        
+	contact: this.data.contact,
+        
+	landline_tel: this.data.landline_tel,
+        
+	telephone: this.data.telephone,
+        
+	username: this.data.username,
+        
+	email: this.data.email,
+        
+	emailpassword: this.data.emailpassword,
+        
+	emailpasswordVerify: this.data.emailpasswordVerify,
+        
+	utype: this.data.utype,
+        
+	reg_type: this.data.reg_type
+      
+}
+      
+	console.log(json);
+      
+	// return false;
+      
+	wx.request({
+        
+		url: 'https://win2.qbt8.com/ycw/Mobile/Members/register',
+        
+		method: "POST",
+        
+		data: json,
+        
+		header: {
+          
+			'content-type': 'application/x-www-form-urlencoded'
+        
+		},
+        
+		success: function (res) {
+          
+			app.globalData.userInfo = res.data.data[0];
+          
+			wx.setStorageSync('loginkey', app.globalData.userInfo)
+          
+			console.log(app.globalData.userInfo)
+          
+			wx.reLaunch({
+            
+				url: '/pages/activation/activation',
+          
+			})
+        
+		}
+      
+	})
+
+
+
+
+
+模块：
+let host = 'https://win2.qbt8.com/ycw/Mobile/'
+
+
+//登录
+
+let login = host + 'Members/login';
+
+
+module.exports = {
+  
+	login: login
+
+}
+
+
+
+const url = require('../../utils/url')
+
+

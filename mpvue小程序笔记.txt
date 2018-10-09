@@ -1,0 +1,167 @@
+初始化mpvue项目：
+node -v
+npm -v	//首先要下载node和npm
+npm set registry https://registry.npm.taobao.org/		//安装淘宝cnpm镜像
+cnpm install -g vue-cli				//全局安装vue-cli
+vue init mpvue/mpvue-quickstart my-project		//创建一个mpvue模版
+cd my-project
+cnpm install					//安装依赖
+cnpm run dev/cnpm start				//项目进入开发模式	
+
+cnpm run build					//打包项目
+
+dist 目录		-----生成的小程序相关代码
+
+cnpm install --save-dev escape-string-regexp	缺少模块escape-string-regexp（手动安装）
+cnpm install vuex-persistedstate --save		将vuex中的数据持久化到本地
+
+引入iView:
+cnpm install iview --save			下载
+cnpm install babel-plugin-import --save-dev	按需引入
+
+["import", {
+    "libraryName": "iview",
+    "libraryDirectory": "src/components"
+  }]
+
+npm install --save-dev less-loader less		定制主题需要下载less
+
+build/webpack.base.conf.js中的extensions
+extensions: ['.js', '.vue', '.json', '.less'],		加上less
+
+优秀的微信小程序UI组件库：
+WeUI WXSS(WeUI WXSS是腾讯官方UI组件库WeUI的小程序版，提供了跟微信界面风格一致的用户体验。)
+GitHub地址：https://github.com/Tencent/weui-wxss
+npm下载：npm i weui-wxss
+
+iView WeApp(iView是TalkingData发布的一款高质量的基于Vue.js组件库，而iView weapp则是它们的小程序版本。)
+GitHub地址：https://github.com/TalkingData/iview-weapp（https://weapp.iviewui.com/docs/guide/start）
+npm下载：npm i iview-weapp
+
+ZanUI WeApp(ZanUI WeApp是有赞移动 Web UI 规范 ZanUI 的小程序实现版本，结合了微信的视觉规范，为用户提供更加统一的使用感受。)
+npm下载：
+GitHub地址：https://github.com/youzan/zanui-weapp（https://youzan.github.io/vant-weapp/#/intro）
+npm i zanui-weapp
+GitHub地址：https://github.com/samwang1027/mpvue-zanui
+npm i mpvue-zanui
+
+vux官网：https://doc.vux.li/zh-CN/components/icon.html
+vux移动端ui组件库使用教程：https://blog.csdn.net/Honnyee/article/details/82181620
+
+Vuex: 专为 Vue.js 应用程序开发的状态管理模式（网址：https://vuex.vuejs.org/zh/guide/）
+
+Vue Router: 是Vue.js的路由管理器（网址：https://router.vuejs.org/zh/guide/）
+
+axios: 基于promise用于浏览器和node.js的http客户端（网址：http://blog.lee-cloud.xyz/post/1/Axios-zhong-wen-wen-dang）
+https://blog.csdn.net/qq_22046267/article/details/81322099
+
+webpack: 是一个现代 JavaScript 应用程序的静态模块打包器(module bundler)（网址：https://www.webpackjs.com/concepts/）
+
+响应式图片：
+https://guozeyu.com/2015/08/using-srcset/#section-6
+https://www.zhangxinxu.com/wordpress/2014/10/responsive-images-srcset-size-w-descriptor/
+
+---------------------
+获取小程序在page onLoad时候传递的options：this.$root.$mp.query
+
+获取小程序在app onLaunch/onShow时候传递的options：this.$root.$mp.appOptions
+
+
+vue 模块基础配置：
+index.vue:
+<template>
+  <div class="container">
+       
+  </div>
+</template>
+
+<script>
+
+export default {
+  data () {
+    return { }
+  },
+  methods: {},
+
+  created () {}
+}
+</script>
+
+<style scoped>
+
+</style>
+
+
+main.js:
+import Vue from 'vue'
+import App from './index'
+
+const app = new Vue(App)
+app.$mount()
+
+
+main.json:
+{
+  	"navigationBarTitleText": "首页",
+  	"enablePullDownRefresh": false,
+  	"component": true,
+	"usingComponents": {
+	    //引入第三方UI组件iView
+	    "i-button": "../../static/iview/button/index",
+	    "i-drawer": "../../static/iview/drawer/index",
+	    //引入第三方UI组件Vant-Weapp
+	    "van-button": "../../static/vant/button/index"
+	}
+}
+
+export default [{
+	config: {
+		"navigationBarTitleText": "页面标题",
+		"enablePullDownRefresh": false,
+		"component": true,
+		"usingComponents": {
+		  "van-search": "/path/to/vant-weapp/dist/search/index"
+		}
+	}
+}]
+
+文件内引入第三方组件：
+<script>
+import { Loading } from 'vant'
+export default {
+  components: {
+    [Loading.name]: Loading
+  }
+}
+</script>
+
+--------------------
+mpvue UI：
+原生小程序微改（轮播）：
+<swiper class="swiper" indicator-dots="true" autoplay="true" interval="5000" duration="1000">
+    <block v-for="(item, index) in movies" :index="index" :key="key">
+        <swiper-item>
+            <image :src="item.url" class="slide-image" mode="aspectFill"/>
+        </swiper-item>
+    </block>
+</swiper>
+
+<script>
+export default {
+        data () {
+            return {
+                movies:[
+	    url:""
+	]
+            }
+        }
+    }
+</script>
+
+
+索引函数（e）修改：
+onChange(e){
+        this.value1 = e.mp.detail.value;	//获取值
+        const index = e.mp.detail.index;	//获取索引
+        this.starIndex4 = index
+    },

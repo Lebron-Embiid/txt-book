@@ -1,0 +1,180 @@
+1.include头文件：
+include 'php_conn.php';
+include 'setup.php';
+
+<?php
+	error_reporting(0);
+	if(!$a){  $a=1; }
+?>
+
+
+<title><?php echo $site_title;?></title>
+<meta name="keywords" content="<?php echo $site_keywords;?>">
+<meta name="description" content="<?php echo $site_description;?>">
+
+
+2.查询一条或多条数据：
+<?php 
+	$sql = "select * from atype_info where type_id = 29 order by num asc";
+	$res = mysql_fetch_assoc(mysql_query($sql));
+ ?>
+
+
+<?php 
+	$sql = "select * from atype_info where type_id = 29 order by num asc";
+	$about = mysql_query($sql);
+	while($res = mysql_fetch_assoc($about)){
+ ?>
+<?php } ?>
+
+
+3.查询$_GET对应分类的数据（带分页）：
+<?php 
+	$sql = "select * from atype_info where type_id = $p order by num desc";
+
+	$t_size=mysql_num_rows(mysql_query($sql,$conn));
+	$v_size=2;
+	$h_size=3;
+	$p_size=$v_size*$h_size;
+	$total=ceil($t_size/$p_size);
+	$page=trim(rp($_REQUEST['page']));
+	if(empty($page)){
+		$page=1;
+	}else{
+		if($page<1)$page=1;
+	}
+		if($page>=$total)$page=$total;
+		$sql.=" limit ".(($page-1)*$p_size).",".$p_size;
+		$product1 = mysql_query($sql);
+		while($res1 = mysql_fetch_assoc($product1)){
+	?>
+<?php } ?>
+
+图片：uploadfiles/<?php echo $res['images1']; ?>
+时间：<?php echo date('Y-m-d',strtotime($res['date1'])); ?>
+
+uploadfiles/<?php echo sf(26,'images2');?>
+
+4.查询多个分类的数据（$i可设置默认高亮）：
+<?php 
+	$sql = 'select * from  atype_info where 1 = 1 ';
+	show_type_all_id('atype',13);
+	$sql .= ' and (';
+	$sql .= $f_sql_name;
+	$f_sql_name = '';
+	$sql .= 'type_id=13)';
+	$sql=$sql." and hot1=1 order by num desc ";
+	$product1 = mysql_query($sql);
+	$i=0;
+	while($res1 = mysql_fetch_assoc($product1)){
+?>
+<?php $i++; } ?>
+
+
+5.分割字段内容：
+<?php  
+	$de=explode(";",$res1['cn_description']);
+	$ade="";
+	foreach ($de as $key => $value) {
+		$ade.="<p>".$value."</p>";
+	}
+	echo $ade;
+?>
+
+
+6.分页：
+头部查询上、下一页：
+
+$page=$_GET['page'];
+$news = mysql_fetch_assoc(mysql_query("select * from atype_info where id = {$page} order by num asc"));
+//查询上一篇和下一篇
+$prev=mysql_fetch_assoc(mysql_query("select * from atype_info WHERE id>{$page} AND type_id={$news['type_id']} ORDER BY num ASC limit 1"));
+$next=mysql_fetch_assoc(mysql_query("select * from atype_info WHERE id<{$page} AND type_id={$news['type_id']} ORDER BY num DESC limit 1"));
+
+
+<?php if(!empty($prev)){ ?>
+	<a href="news_detail.php?a=4&page=<?php echo $prev['id']; ?>">上一页：<?php echo $prev['cn_name']; ?></a>
+<?php }else{ ?>
+        <a href="javascript:void(0);">上一页：无</a>
+<?php } ?>
+<?php if(!empty($next)){ ?>
+        <a href="news_detail.php?a=4&page=<?php echo $next['id']; ?>">下一页：<?php echo $next['cn_name']; ?></a>
+<?php }else{ ?>
+        <a href="javascript:void(0);">下一页：无</a>
+<?php } ?>
+
+
+7.隐藏后台：
+隐藏区域内容：
+<?php if(!in_array($manage_id,array(1))){ ?>
+<?php } ?>
+
+添加样式隐藏：
+<?php if(in_array($manage_id,array(1))){ ?>style="display: none;" <?php } ?>
+
+判断隐藏：
+<?php if(in_array($manage_id,array(12))){ echo "地  址"; } else { echo "信息名称"; } ?>
+多重判断：
+<?php if(in_array($manage_id,array(12))){ echo "地  址"; } elseif (in_array($manage_id,array(15))){ echo "联系地址"; } else { echo "信息名称"; } ?>
+
+8.正则判断：
+//手机号
+var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/;
+if (!myreg.test(tel)) {
+	alert("The mobile phone format is incorrect, please re-enter!");
+	return false;
+}
+
+//邮箱
+var myreg1 = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+if (!myreg1.test(email)) {
+	alert("The email format is incorrect, please re-enter!");
+	return false;
+}
+
+//判断密码强弱
+var reg = /^[0-9]{6,16}$|^[a-zA-Z]{6,16}$/;    //全是数字或全是字母     6-16个字符
+    
+var reg1 = /^[A-Za-z0-9]{6,16}$/;                 //数字、26个英文字母      6-16个字符
+    
+var reg2 = /^\w{6,16}$/;                              // 由数字、26个英文字母或者下划线组成的字符串    6-16个字符
+
+$.ajax({
+	url:"ajax.php",
+	type: "POST",
+	data: {"username":username,"email":email,"tel":tel,"message":message},
+	dataType: "json",
+	success: function(msg){
+		if(msg.status==1){
+			alert(msg.err);
+		}else{
+			alert(msg.err);
+		}
+	}
+})
+
+
+9.分页
+不带其他参数：
+<?php
+    // $goto_file = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'&page='; 
+    if($_GET['page'] || $_GET['page'] == 0){
+       $str1="?page=".$_GET['page'];
+       $uri=str_replace($str1,"",$_SERVER['REQUEST_URI']);
+       $goto_file = 'http://'.$_SERVER['HTTP_HOST'].$uri.'?page='; 
+    }else{
+       $goto_file = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?page='; 
+    }
+?>
+
+带其他参数：
+<?php
+    // $goto_file = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'&page='; 
+    if($_GET['page']){
+       $str1="&page=".$_GET['page'];
+       $uri=str_replace($str1,"",$_SERVER['REQUEST_URI']);
+       $goto_file = 'http://'.$_SERVER['HTTP_HOST'].$uri.'&page='; 
+    }else{
+       $goto_file = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?&page='; 
+    }
+?>

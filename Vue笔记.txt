@@ -1,0 +1,648 @@
+搭建项目：
+# 全局安装 vue-cli
+npm install --global vue-cli
+
+# 创建一个基于 webpack 模板的新项目
+vue init webpack my-project
+
+# 安装依赖
+cd my-project
+npm install
+npm run dev
+或者
+npm start
+
+使用cnpm的方法：
+1.npm config set registry https://registry.npm.taobao.org
+2.npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+取消cnpm的方法：
+1.npm uninstall cnpm -g
+2.npm config delete registry
+3.npm config delete disturl
+
+
+Vue-cli3.0项目搭建：
+npm/cnpm install -g @vue/cli		//安装依赖
+vue create my-project
+
+
+或者：(用淘宝镜像安装)
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+cnpm install vue
+
+# 全局安装 vue-cli
+cnpm install --global vue-cli
+
+# 创建一个基于 webpack 模板的新项目
+vue init webpack my-project
+
+# 安装依赖
+cnpm install
+
+# 运行项目
+cnpm run dev
+或者
+cnpm start
+
+# 打包项目
+cnpm run build
+
+
+
+在打包之前需要修改一个地方，那就是config->index.js文件，修改build: { assetsPublicPath: '/'为assetsPublicPath: './', productionSourceMap:false }
+//上面文件改好后，开始打包，执行如下命令：
+npm run build
+打包后生成dist文件夹，
+发布的话直接把 dist 目录丢到服务器就OK  访问xxx/dist/index.html
+
+
+Vue项目字体px转rem响应式：（https://blog.csdn.net/skyblacktoday/article/details/80433575）
+进入项目下载：
+npm i lib-flexible --save
+在main.js引入：
+import 'lib-flexible'
+下载px转rem工具：
+npm i px2rem-loader --save-dev
+配置 px2rem-loader:（build -> utils.js）
+
+在cssLoader 后添加：
+var px2remLoader = {
+  loader: 'px2rem-loader',
+  options: {
+    remUnit: 75
+  }
+}
+
+在generateLoaders数组添加：
+const loaders = options.usePostCSS ? [cssLoader, postcssLoader,px2remLoader] : [cssLoader,px2remLoader]
+
+
+安装VueX:
+npm install vuex --save
+
+# 引入模块
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
+# 安装promise依赖
+npm install es6-promise --save
+
+# 引入模块，放在VueX之前
+import 'es6-promise/auto'
+
+-------------------------------------------------------------
+
+安装reset默认样式：
+npm i reset-css
+
+安装Element-ui
+npm i element-ui -S
+
+在main.js中：（全部引入）
+import ElementUI from 'element-ui';
+import reset from 'reset-css';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
+
+按需引入需要安装：
+npm install babel-plugin-component -D
+
+然后在.babelrc文件：
+在env的test中增加
+"libraryName": ["element-ui"],
+这项配置
+
+
+-------------------------------------------------------------
+路由：Vue.Router
+import Router from 'vue-router'		//引入路由组件
+import Nav from '@/components/nav'
+import Hello from '@/components/helloworld'	//引入需要跳转的组件
+
+Vue.use(Router)				//全局使用路由
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'Nav',
+      component: Nav
+    },
+    {
+      path: '/hello/:userId',			//带参数时（userId要保持一致）
+      name: 'Hello',
+      component: Hello
+    }
+  ]
+})
+
+<router-link :to="{name:'Hello'}">处理中心</router-link>			//页面使用router-link跳转
+<router-link :to="{name:'Hello', params: { userId: 123 }}">处理中心</router-link>	//带参数跳转
+
+index.vue:（单页面显示多个组件）
+import Table from '@/components/table'		//先引入其他组件
+
+data(){
+    return{
+        components:{
+    	vTable: Table
+        },
+    }
+}					//注册组件
+
+<vTable></vTable>				//使用组件标签
+
+
+-------------------------------------------------------------
+Vue基础骨架：
+<template>
+  <div class="container">
+       
+  </div>
+</template>
+
+<script>
+
+export default {
+  data () {
+    return { }
+  },
+  methods: {},
+
+  created () {}
+}
+</script>
+
+<style scoped>
+
+</style>
+
+
+
+Module模块：
+export		定义模块
+import		加载模块
+export default	命令其实只是输出一个叫做default的变量
+
+
+
+1.注册组件
+<div id="box">
+	<my-component></my-component>
+</div>
+
+var data = { message: 0 };
+Vue.component('my-component', {
+  template: '<button v-on:click="message += 1" >{{ message }}</button>',
+  data: function(){				//data必须是函数
+			return {
+				message : 0
+			}
+		}
+})
+
+局部注册
+var Child = {
+  template: '<div>A custom component!</div>'
+}
+
+2.创建根实例
+new Vue({
+  el: '#example',
+  components: {
+		'my-component': Child	
+	}
+})
+
+
+
+指令：
+v-bind(缩写 : )
+v-click(缩写 @ )
+v-once		//执行一次性的插值
+v-html		//据解释为纯文本
+v-for		//渲染列表
+
+
+全局API：
+Vue.extend( options )	//创建一个子类
+
+var profile = Vue.extend({
+	template: "<p>{{lbj}} 23</p>",
+	data:function(){
+		return{
+			lbj: 'lebron james'
+		}
+	}
+})
+new profile().$mount('#box');	//创建实例并挂载到一个元素上
+
+
+Vue-router:
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+	mode: "history",
+	routes:[
+		{
+			path: '/index/:id',
+			component: home，
+			//嵌套多层路由(子路由)
+			children:[
+				{
+					path: '/profile',
+					component: profile
+				},
+				{
+					path: '/posts',
+					component: posts
+				}
+			]
+		},
+		{
+			path: '/demo',
+			component: demo
+		}
+	]
+})
+
+
+
+同一个路由，多个组件渲染：
+const router = new VueRouter({
+	mode: 'history',	
+	routes: [
+	{
+		path: '/',
+		components: {
+			default: Foo,
+			a: Bar,
+			b: Baz
+		},
+		redirect: '/b',
+		redirect: { name: 'foo' },	//重定向(多种配置方法)
+		redirect: to => {		
+			// 方法接收 目标路由 作为参数
+			// return 重定向的 字符串路径/路径对象
+		},
+		alias: '/b',		//别名
+		beforeEnter: (to, from, next) => { // ... }	//某个路由独享的钩子（可以直接定义）
+	}
+	],
+	router.beforeEach((to, from, next) => { // ... }) 	//导航钩子
+})
+
+每个钩子方法接收三个参数：
+
+to: Route: 即将要进入的目标 
+
+from: Route: 当前导航正要离开的路由
+
+next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
+
+next(): 进行管道中的下一个钩子。如果全部钩子执行完了，则导航的状态就是 confirmed （确认的）。
+
+next(false): 中断当前的导航。如果浏览器的 URL 改变了（可能是用户手动或者浏览器后退按钮），那么 URL 地址会重置到 from 路由对应的地址。
+
+next('/') 或者 next({ path: '/' }): 跳转到一个不同的地址。当前的导航被中断，然后进行一个新的导航。
+
+确保要调用 next 方法，否则钩子就不会被 resolved。
+
+组件内的钩子：
+beforeRouteEnter:	不能访问 this，因为钩子在导航确认前被调用,因此即将登场的新组件还没被创建。不过，你可以通过传一个回调给 next来访问组件实例。
+beforeRouteLeave:	可以访问 this。这个 leave 钩子通常用来禁止用户在还未保存修改前突然离开。可以通过 next(false) 来取消导航。
+
+
+vue初始文件（包括头部底部组件）：
+<template>
+	<div id="store">
+    	<dsHeader :headerTitle="headerTitle" :backshow="backshow" :show="show"></dsHeader>
+		
+    	<dsFooter :selected="selected"></dsFooter>
+	</div>
+</template>
+
+<script>
+import Vue from 'vue'
+import dsHeader from '@/components/header'
+import dsFooter from '@/components/footer'
+
+export default{
+	data(){
+		return{
+			headerTitle: "商城",
+	    		backshow: true,
+			show: true,
+			selected:"store"
+		}
+	},
+	components:{
+		dsHeader,
+		dsFooter
+	}
+}
+</script>
+
+<style scoped>
+	
+</style>
+
+
+Vue项目遇到的小知识：
+点击事件禁止冒泡：@click.stop
+返回上一页：@click="$router.back(-1)"
+路由跳转：
+this.$router.push('/store')	//浏览器有返回记录
+this.$router.replace('/store')	//浏览器没有返回记录
+强制修改第三方UI组件的样式：/deep/
+路由跳转传参：<router-link :to="{name:'Search',params:{id:item.id}}"></router-link>
+获取路由参数：this.$route.params.id
+时间转换插件：http://momentjs.cn/
+路由懒加载：
+const Index = r => require.ensure([], () => r(require('@/components/index')), 'index')
+const Home = r => require.ensure([], () => r(require('@/components/home')), 'home')
+const Store = r => require.ensure([], () => r(require('@/components/store')), 'store')
+
+//遍历，使用require打开图片
+<mt-cell :title="item.title" v-for="(item,index) in cellLists" :key="index">
+          <span>{{item.date}}</span>
+          <img slot="icon" :src="item.img">
+</mt-cell>
+cellLists: [{
+        title:"用工合同纠纷咨询",
+        date:"2018-08-16",
+        img:require("../assets/serve_icon1.png")	//require()可以正确显示图片
+      },{
+        title:"张三起诉我司合同纠纷应诉",
+        date:"2018-08-16",
+        img:require("../assets/serve_icon2.png")
+      },{
+        title:"执行文书递交",
+        date:"2018-08-16",
+        img:require("../assets/serve_icon3.png")
+      }]
+
+
+header组件使用props传值：（父传子，子组件props用于接收父组件传来的值）
+header.vue:
+<mt-header :title="headerTitle">
+	<router-link to="/" slot="left">
+	<mt-button>
+		<img src="../assets/back.png" class="back_img" slot="icon">
+	</mt-button>
+	</router-link>
+	<mt-button slot="right" v-show="show" :show="show">
+		<img src="../assets/person.png" class="per_img" slot="icon">
+	</mt-button>
+</mt-header>
+
+<script>
+	import Vue from 'vue'
+	import { Header } from 'mint-ui'
+	Vue.use(Header)
+
+	export default {
+	  name: 'Header',
+	  data () {
+	    return {
+	    	
+	    }
+	},
+	  props:{
+		headerTitle: String,
+		show: Boolean
+	  },
+	}
+</script>
+
+index.vue:
+<dsHeader :headerTitle="headerTitle"></dsHeader>
+
+<script>
+import Vue from 'vue'
+import dsHeader from '@/components/header'
+
+export default {
+  name: 'index',
+  data () {
+    return {
+      headerTitle: "尊贵会员"
+    },
+  components:{
+    dsHeader
+  }
+}
+</script>
+
+
+子组件向父组件传值：$emit
+子组件：
+<template>
+	<div class="swipe_box">
+		<mt-swipe :auto="4000">
+		  <mt-swipe-item v-for="(item,index) in swipeList" :key="index"><img :src="item.img"></mt-swipe-item>
+		</mt-swipe>
+		<img class="vip" v-show="vipShow" :vip="vipShow" @click="vipBtn" src="../../assets/img/vip.png">
+	</div>
+</template>
+
+methods:{
+    vipBtn(){
+      this.$emit("childToParent",this.vipShow)	//childToParent为自定义事件名，this.vipShow为传给父组件的值
+    }
+  }
+
+
+父组件：
+ <app-banner :swipeList="swipeList" :vipShow="vip" @childToParent="showVip"></app-banner>	//@childToParent 此处是子组件定义的事件名
+
+ data () {
+    return {
+      vipShow: false,
+    }
+},
+  methods:{
+  	showVip(data){
+      		this.vipShow = !this.vipShow
+  	}
+  },
+
+父组件：
+<app-banner :swipeList="swipeList" :vipShow="vip" @childToParent="showVip"></app-banner>
+
+
+
+vue循环元素点击切换class高亮：
+<button v-for="(item,index) in btn_list" :key="index" :class="{'active':index == curIndex}" @click="changeBtn(index)">{{item.name}}</button>
+
+data(){
+	return{
+			btn_list:[{
+				name:"付费咨询"
+			}],
+			curIndex: 0,
+	},
+	methods:{
+		changeBtn(index){
+			this.curIndex = index
+		}
+	}
+}
+
+
+向下弹出picker:
+<div @click="showType">{{pickerType}}<img src="../../assets/img/icon/down2.png" alt=""></div>
+<mt-popup v-model="popupVisible" position="bottom">
+	<div class="edit_title">
+		<!-- <div class="cancle" @click="hideType">取消</div> -->
+		<div class="query" @click="hideType">确定</div>
+	</div>
+	<mt-picker width="100%" ref="picker" :slots="slots" @change="onValuesChange" v-model="pickerType"></mt-picker>
+</mt-popup>
+
+data(){
+	return{
+		slots: [
+	        {
+	          flex: 1,
+	          values: ['婚姻家庭', '未婚家庭', '单亲家庭'],
+	          className: 'slot1',
+	          textAlign: 'center'
+	        }
+	      ],
+	      	popupVisible: false,
+	      	pickerType:"婚姻家庭"
+	}
+},
+	methods:{
+		onValuesChange(picker, values) {
+        	this.pickerType = values[0]
+	    },
+	    showType(){
+	    	this.popupVisible = true
+	    },
+	    hideType(){
+	    	this.popupVisible = false
+	    }
+	}
+
+
+
+vue定时器ES6写法：
+let interval = setInterval(()=>{
+				this.currentTime--;
+				this.phoneCode = this.currentTime + '秒',
+				this.codeDis = true,
+				this.active = 'active'
+			},1000)
+
+
+vue mint-ui选项卡：
+<mt-navbar v-model="selected">
+			  <mt-tab-item id="doing">option A</mt-tab-item>
+			  <mt-tab-item id="finish">option B</mt-tab-item>
+			</mt-navbar>
+
+			<!-- tab-container -->
+			<mt-tab-container v-model="selected">
+			  <mt-tab-container-item id="doing">
+				1
+			  </mt-tab-container-item>
+			  <mt-tab-container-item id="finish">
+				2
+			  </mt-tab-container-item>
+			</mt-tab-container>
+
+import { Navbar, TabItem } from 'mint-ui'
+Vue.use( Navbar, TabItem )
+
+export default{
+	data(){
+		return{
+			selected: "doing",
+		}
+	}
+}
+
+
+vue 页面切换过度动画：
+template：
+<transition :name="transitionName">
+      <router-view/>
+    </transition>
+
+js：
+export default {
+  name: 'App',
+  data(){
+    return{
+      transitionName:''
+    }
+  },
+  watch: {//使用watch 监听$router的变化
+    $route(to, from) {
+      //如果to索引大于from索引,判断为前进状态,反之则为后退状态
+      if(to.meta.index > from.meta.index){
+        //设置动画名称
+        this.transitionName = 'slide-left';
+      }else{
+        this.transitionName = 'slide-right';
+      }
+    }
+  }
+}
+
+router：
+routes: [
+    {
+      path: '/',
+      name: 'Index',
+      meta:{index:0},		//index越小，则向左滑动
+      component: Index
+    },
+    {
+      path: '/home',
+      name: 'Home',
+      meta:{index:1},		//index越大，则向右滑动
+      component: Home
+    },
+    {
+      path: '/store',
+      name: 'Store',
+      meta:{index:2},
+      component: Store
+    }
+]
+
+css：
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: transform .4s ease;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  padding-top: 88px;		//头部header的高度
+  box-sizing: border-box;
+  top: 0;
+}
+.slide-right-enter {
+  /* opacity: 0; */
+  transform: translate3d(-100%, 0, 0);
+}
+.slide-right-leave-active {
+  /* opacity: 0; */
+  transform: translate3d(100%, 0, 0);
+}
+.slide-left-enter {
+  /* opacity: 0; */
+  transform: translate3d(100%, 0, 0);
+}
+.slide-left-leave-active {
+  /* opacity: 0; */
+  transform: translate3d(-100%, 0, 0);
+}
