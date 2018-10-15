@@ -1,6 +1,7 @@
 搭建项目：
 # 全局安装 vue-cli
 npm install --global vue-cli
+cnpm install -g @vue/cli-init
 
 # 创建一个基于 webpack 模板的新项目
 vue init webpack my-project
@@ -33,6 +34,7 @@ cnpm install vue
 
 # 全局安装 vue-cli
 cnpm install --global vue-cli
+cnpm install -g @vue/cli-init
 
 # 创建一个基于 webpack 模板的新项目
 vue init webpack my-project
@@ -48,7 +50,23 @@ cnpm start
 # 打包项目
 cnpm run build
 
+安装vux：
+cnpm install vux --save
+cnpm install vux-loader --save-dev
+cnpm install less less-loader --save-dev
 
+webpack.base.conf.js修改如下：
+//将module.exports = {
+改为
+var originalConfig = {
+
+文件底部加上
+const vuxLoader = require('vux-loader')
+const webpackConfig = originalConfig 	// 原来的 module.exports 代码赋值给变量 webpackConfig
+
+module.exports = vuxLoader.merge(webpackConfig, {
+  plugins: ['vux-ui']
+})
 
 在打包之前需要修改一个地方，那就是config->index.js文件，修改build: { assetsPublicPath: '/'为assetsPublicPath: './', productionSourceMap:false }
 //上面文件改好后，开始打包，执行如下命令：

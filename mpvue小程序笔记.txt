@@ -15,6 +15,50 @@ dist 目录		-----生成的小程序相关代码
 cnpm install --save-dev escape-string-regexp	缺少模块escape-string-regexp（手动安装）
 cnpm install vuex-persistedstate --save		将vuex中的数据持久化到本地
 
+
+在mpvue项目中使用vant-weapp：
+git clone https://github.com/youzan/vant-weapp.git（下载vant weapp组件库）
+把下载好vant-weapp里面的dist文件夹复制到static目录下（推荐改名为vant） 注意：只复制dist文件夹
+在微信开发者工具打开项目的dist文件夹进行测试
+
+// build/webpack.base.conf.js 的babel-loader中（配置webpack为vant支持ES6）
+{
+        test: /\.js$/,
+        include: [resolve('src'), resolve('test'), resolve('static/vant')], // 添加vant文件目录
+        use: [
+          'babel-loader',
+          {
+            loader: 'mpvue-loader',
+            options: {
+              checkMPEntry: true
+            }
+          },
+        ]
+      },
+
+引入需要的组件：（在当前页面的main.json文件中）
+{
+  "usingComponents": {
+    "van-button": "/static/vant/button/index"
+  }
+}
+
+使用：
+<van-button type="primary">测试</van-button>
+
+修改样式：
+vant-weapp每个组件都有一个外部样式类的属性（custom-class），修改样式需要 根节点+外部样式类
+<div class="indexPage">
+	<van-button type="primary" custom-class="zdy-btn">测试</van-button>
+</div>
+
+<style>
+	.indexPage .zdy-btn{
+		//修改样式
+	}
+</style>
+
+
 引入iView:
 cnpm install iview --save			下载
 cnpm install babel-plugin-import --save-dev	按需引入

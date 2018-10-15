@@ -1,0 +1,22 @@
+官网：
+http://www.demenk.com（公司官网）
+http://www.adnice.com（多彩互动）
+http://www.hyjfgroup.com（汇银金服）
+http://www.szpdu.com（胜威南方）
+http://www.talent-vape.com（电子烟）
+
+
+mobile:
+http://www.demenk.com/m/index.html	（公司官网）
+http://doing.demenk.com/cyc	（车易采）
+http://doing.demenk.com/ddwd （大地微店-微信）
+
+
+小程序：
+益才网
+中华百城
+仿抖音
+
+
+vue：
+http://doing.demenk.com/dasheng/dist/index.html#/（大胜法律）
