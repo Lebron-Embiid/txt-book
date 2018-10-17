@@ -191,6 +191,8 @@ div内容垂直居中：d-flex align-content-center flex-wrap
 div高度拉伸：align-self-stretch
 两端对齐：d-flex justify-content-between
 
+flex-wrap: 换行
+
 怪异盒子：
 -webkit-box-sizing: border-box;
 -moz-box-sizing: border-box;

@@ -209,3 +209,6 @@ onChange(e){
         const index = e.mp.detail.index;	//获取索引
         this.starIndex4 = index
     },
+
+三元运算：
+:style="{background: item.dot == true?'':''}"
