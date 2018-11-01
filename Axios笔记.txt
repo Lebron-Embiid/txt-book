@@ -1,0 +1,77 @@
+安装：
+npm install --save axios vue-axios
+
+main.js:
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+ 
+Vue.use(VueAxios, axios)
+
+解决vue axios跨域：
+config -> index.js
+dev:{
+proxyTable: {
+      '/api':{  
+        target:'http://gao.demenk.com',//设置调用的接口域名和端口号 ( 设置代理目标)
+        changeOrigin: true,
+        pathRewrite: { 
+            '^/api': ''
+        } 
+      }
+    }
+}
+
+this.axios({
+        method: 'get',
+        baseURL: '/api',		//指向target路径
+        url: "/dasheng/public/index.php/api/Index/index.html"
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+
+
+vue 时间戳转换
+新建date.js:
+export function formatDate (date, fmt) {
+    if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+    }
+    let o = {
+        'M+': date.getMonth() + 1,
+        'd+': date.getDate(),
+        'h+': date.getHours(),
+        'm+': date.getMinutes(),
+        's+': date.getSeconds()
+    };
+    for (let k in o) {
+        if (new RegExp(`(${k})`).test(fmt)) {
+            let str = o[k] + '';
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str));
+        }
+    }
+    return fmt;
+};
+ 
+function padLeftZero (str) {
+    return ('00' + str).substr(str.length);
+};
+
+home.vue:
+{{item.time*1000 | formatDate}}		//输出
+
+import { formatDate } from '../util/date.js';
+
+export default {
+filters:{
+    formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd');
+    }
+  }
+}
