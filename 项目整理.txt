@@ -20,3 +20,4 @@ http://doing.demenk.com/ddwd （大地微店-微信）
 
 vue：
 http://doing.demenk.com/dasheng/dist/index.html#/（大胜法律）
+http://doing.demenk.com/dasheng2/

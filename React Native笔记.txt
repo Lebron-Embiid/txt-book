@@ -48,7 +48,9 @@ yarn install
 打开控制面板 -> 系统和安全 -> 系统 -> 高级系统设置 -> 高级 -> 环境变量 -> 新建，创建一个名为ANDROID_HOME的环境变量（系统或用户变量均可）
 c:\Users\你的用户名\AppData\Local\Android\Sdk
 用户变量：
-ANDROID_HOME	C:\Users\Demenk\AppData\Local\Android\Sdk
+ANDROID_HOME	D:\Android\sdk
+PATH		D:\Java\sdk\tools
+		D:\Java\sdk\platform-tools
 系统变量：
 JAVA_HOME	C:\Program Files (x86)\Java\jdk1.8.0_181
 CLASSPATH	.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;
@@ -68,3 +70,8 @@ cd demo
 react-native start
 react-native run-android
 react-native run-ios
+
+查看是否连接成功：
+adb devices
+连接模拟器：
+adb connect 127.0.0.1:62001 
