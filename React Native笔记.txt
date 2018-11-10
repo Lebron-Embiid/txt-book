@@ -58,7 +58,8 @@ Path		C:\Users\Demenk\AppData\Local\Android\Sdk\platform-tools
 		%JAVA_HOME%\bin
 		%JAVA_HOME%\jre\bin
 
-Genymotion模拟器：https://www.genymotion.com/account/#account-orders
+Android Studio下载：https://developer.android.google.cn/studio/
+Genymotion模拟器：https://www.genymotion.com/download/
 VirtualBox下载：https://www.virtualbox.org/wiki/Downloads
 帐号：lebron666
 密码：lebron0618
@@ -67,6 +68,7 @@ VirtualBox下载：https://www.virtualbox.org/wiki/Downloads
 npm install -g yarn react-native-cli
 react-native init demo
 cd demo
+npm i
 react-native start
 react-native run-android
 react-native run-ios

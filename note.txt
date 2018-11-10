@@ -556,7 +556,7 @@ $(".file").on("change","input[type='file']",function(){
 	}
 })
 
-上传单张图片，更换头像，转换为base64格式：
+上传base64单张图片，更换头像：
 html:
 <div class="img_box">
 	<img src="images/ls_head.png" class="ls_head">
@@ -589,10 +589,53 @@ js:
 	        }
 	    }
 	$(".text-center").on("change","input",function(){
-		run(this, function (data) {
-			$('.ls_head').attr('src',data);
+		var _this = this;
+		run(_this, function (data) {
+			$(_this).siblings().attr('src',data);
 		});
 	})
+
+
+上传base64多张图片：
+<link rel="stylesheet" href="__TMPL__/public/assets/css/photo.css">
+<script src="__TMPL__/public/assets/js/jquery-2.1.4.min.js"></script>
+<script src="__TMPL__/public/assets/js/LocalResizeIMG.js"></script>
+
+html：
+<div class="up_pic">
+	<span id="chose_pic_btn1" class="chose_pic_btn" style="">
+		<input type="file" required id="file1" accept="image/*" />
+	</span> 
+</div>	
+
+js：
+
+<script>
+$(function(){
+        var picArr1 = new Array();// 存储图片
+        $('#file1').localResizeIMG({
+            width:800,// 宽度
+            quality: 1, // 压缩参数 1 不压缩 越小清晰度越低
+            success: function (result) {
+                var img = new Image();
+                img.src = result.base64;
+                var _str = "<span class='pic_look' style='background-image: url("+ img.src + ");'><em id='delete_pic1'></em></span>"
+                $('#chose_pic_btn1').after(_str);
+                var _i =  picArr1.length;
+                picArr1[_i] = result.base64;
+                // picArr[_i] = _i;
+                console.log(picArr1)
+            }
+        });
+        // 删除
+        $(document).on('click', '#delete_pic1', function(event) {
+            var aa = $(this).parents(".pic_look").index();
+            picArr1.splice(aa,1);
+            $(this).parents(".pic_look").remove();
+            console.log(picArr1);
+        }); 
+})
+</script>
 
 
 获取图片预览：
