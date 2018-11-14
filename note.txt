@@ -889,7 +889,7 @@ html:
 <div class="map" id="map"></div>
 
 css:
-#allmap{
+#map{
 	height: 4.8rem;
 }
 

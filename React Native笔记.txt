@@ -53,7 +53,7 @@ PATH		D:\Java\sdk\tools
 		D:\Java\sdk\platform-tools
 系统变量：
 JAVA_HOME	C:\Program Files (x86)\Java\jdk1.8.0_181
-CLASSPATH	.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;
+CLASSPATH	%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;
 Path		C:\Users\Demenk\AppData\Local\Android\Sdk\platform-tools
 		%JAVA_HOME%\bin
 		%JAVA_HOME%\jre\bin
