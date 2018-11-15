@@ -58,6 +58,7 @@ Path		C:\Users\Demenk\AppData\Local\Android\Sdk\platform-tools
 		%JAVA_HOME%\bin
 		%JAVA_HOME%\jre\bin
 
+expo client下载：https://expo.io/tools
 Android Studio下载：https://developer.android.google.cn/studio/
 Genymotion模拟器：https://www.genymotion.com/download/
 VirtualBox下载：https://www.virtualbox.org/wiki/Downloads
@@ -77,3 +78,21 @@ react-native run-ios
 adb devices
 连接模拟器：
 adb connect 127.0.0.1:62001 
+
+
+react-native app项目：
+安装工作集：
+npm install -g create-react-native-app
+创建项目：
+create-react-native-app projectName
+cd projectName
+生成android和ios文件夹：
+npm run eject
+npm install
+预览项目：
+expo start
+
+app.json：
+"expo": {
+  "sdkVersion": "18.0.0"
+ }
