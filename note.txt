@@ -289,6 +289,33 @@ $toTop.click(function () {
 </script>
 
 
+底部友情链接：
+html:
+<div class="links">
+	<span>友情链接：</span>
+	<div>
+		<a href="" title="" target="_blank">徳盟互联 </a> /
+	</div>
+</div>
+
+css:
+.footer .links > span{
+	display: inline-block;
+	vertical-align: top;
+	font-size: .16rem;
+}
+.footer .links div{
+	display: inline-block;
+	width: 90%;
+}
+.footer .links div a{
+	display: inline-block;
+	vertical-align: top;
+	font-size: .14rem;
+	color: #787878;
+}
+
+
 5.Swiper 轮播:
 <div class="swiper-container swiper-no-swiping">   //禁止手动滑动
 	<div class="swiper-wrapper">
@@ -470,6 +497,30 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 		<img src="images/index_right.png" alt="">
 	</a>
 </div>
+
+切换按钮样式（块状）：
+.carousel-indicators li{
+	width: .5rem;
+	height: 2px;
+	background: #fff;
+	border-radius: 0;
+	border: 0;
+	margin: 0;
+	margin-right: .1rem;
+	transition: all .5s ease;
+}
+.carousel-indicators .active{
+	width: .5rem;
+	height: 2px;
+	border-radius: 0;
+	margin: 0;
+	background: #006ACD;
+	margin-right: .1rem;
+}
+.carousel-indicators li:last-child{
+	margin-right: 0;
+}
+
 
 data-interval="0"				//添加属性，禁止自动轮播
 $('.carousel').carousel('pause')			//取消自动播放
