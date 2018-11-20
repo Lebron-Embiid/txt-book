@@ -162,6 +162,9 @@ blockquote:before, blockquote:after, q:before, q:after{ content: ''; content: no
 	refer();
 </script>
 
+获取当前页面的title标题：
+<script>document.write($(document).attr("title"));</script>
+
 2.溢出部分显示省略号:
 display: -webkit-inline-box;
 
