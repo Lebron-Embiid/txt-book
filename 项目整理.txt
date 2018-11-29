@@ -18,6 +18,13 @@ http://doing.demenk.com/ddwd （大地微店-微信）
 仿抖音
 
 
+服务器ftp：
+doing:
+112.74.86.74
+帐号：demen02
+密码：Fk2zxt@b
+
+
 vue：
 http://doing.demenk.com/dasheng/dist/index.html#/（大胜法律）
 http://doing.demenk.com/dasheng2/

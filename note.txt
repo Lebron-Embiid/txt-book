@@ -1663,6 +1663,74 @@ $(".getCode").click(function(){
   $(".line").slideUp();
 </script>
 
+或者：
+<!-- 滚动资讯 -->
+<div class="slide_news">
+	<span>益招咨询</span>
+	<ul class="line">
+		<li style="margin-top: 0px; "><a href="">中央部宣传“学习强国” 学习平台招聘启事1</a></li>
+		<li style="margin-top: 0px; "><a href="">中央部宣传“学习强国” 学习平台招聘启事2</a></li>
+		<li style="margin-top: 0px; "><a href="">中央部宣传“学习强国” 学习平台招聘启事3</a></li>
+	</ul>
+</div>
+
+css:
+.slide_news{
+    padding: .3rem;
+    box-sizing: border-box;
+    background: #fff;
+    overflow: hidden;
+}
+.slide_news span{
+    float: left;
+    display: block;
+    width: .7rem;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+}
+.slide_news .line{
+    float: left;
+    width: 75%;
+    height: 40px;
+    overflow: hidden;
+    padding: 0 1% 0 1%;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+.slide_news .line li a{
+    color: #747474;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+js:
+<script type="text/javascript">
+	    //向上滑动动画
+	    $(function(){
+			function autoani(){
+		        $(".line li").first().animate({"margin-top":'-20px'},1000,function(){
+		          $(this).css("margin-top",0).appendTo(".line");
+		        })
+		      }
+	      
+	      //自动间隔时间向上滑动
+	      var anifun = setInterval(autoani,1000);
+	      
+	      //悬停时停止滑动，离开时继续执行
+	      $(".line").children("li").mouseover(function(){
+	        clearInterval(anifun);      //清除自动滑动动画
+	      },function(){
+	        anifun = setInterval(autoani,1000); //继续执行动画
+	      })
+	    })
+	</script>
+
 
 41.弹窗阴影box-shadow：
 html:
