@@ -1517,19 +1517,22 @@ $(".down").click(function(){
 
 
 38.获取验证码倒计时：
+html:
+<input type="button" value="获取验证码" class="getCode"></input>
+
 function invokeSettime(obj){
 	var countdown=60;
 	settime(obj);
 	function settime(obj) {
 		if (countdown <= 0) {
-		   	$(obj).attr("disabled",false);
-		  	$(obj).text("获取验证码");
+		   	$(obj).prop("disabled",false);
+		  	$(obj).val("获取验证码");
 		   	countdown = 60;
 		   	return;
 		} else {
 		   	countdown--;
-		   	$(obj).attr("disabled",true);
-		   	$(obj).text(countdown+"s");
+		   	$(obj).prop("disabled",true);
+		   	$(obj).val(countdown+"s");
 		}
 		setTimeout(function() {
 	        	settime(obj) }
@@ -2029,3 +2032,156 @@ html:
 
 js:
 $(".pick-area1").pickArea();
+
+
+49.定位城市：
+html:
+<div class="fixed_city_box">
+		<div class="left_provice">
+			<ul>
+
+			</ul>
+		</div>
+		<div class="right_city">
+
+		</div>
+     </div>
+
+css:
+<style>
+			html,body{background: #fff;position: relative;height: 100%;}
+			.fixed_city_box{overflow: hidden;}
+			.left_provice{position:absolute;left:0;top:0;width: 20%;height:100%;overflow-y: scroll;padding-top: 1.3rem;box-sizing: border-box;border-right: 1px solid #E0E0E0;}
+			.right_city{position:absolute;right:0;top:0;width: 80%;height:100%;overflow-y: scroll;padding: 1.5rem .3rem .3rem .4rem;box-sizing: border-box;}
+
+			.left_provice ul li{text-align: center;color: #2d2d2d;font-size: .3rem;padding: .2rem 0;border-right: .05rem solid transparent;position: relative;}
+			.left_provice ul li::after{content: "";width: .05rem;height: 60%;position: absolute;right: -.05rem;top: 20%;z-index: 3;background: transparent;}
+			.left_provice ul li.active::after{background: #F15A22;}
+
+			.city_box{display: none;}
+			.city_box.active{display: block;}
+			.city_box .city_item,.city_box .fixed_item{margin-bottom: .4rem;overflow: hidden;}
+			.city_box .city_item h4,.city_box .fixed_item h4{color: #2d2d2d;font-size: .28rem;font-weight: normal;margin: 0 0 .3rem;}
+			.city_box .city_item ul,.city_box .fixed_item ul{overflow: hidden;}
+			.city_box .city_item ul li,.city_box .fixed_item ul li{display: block;width: 30%;height: .8rem;line-height: .8rem;float: left;margin: 0 4% .2rem 0;}
+			.city_box .city_item ul li a,.city_box .fixed_item ul li a{display: block;color: #2d2d2d;font-size: .26rem;text-align: center;background: #f1f1f1;border-radius: .1rem;padding: 0 .1rem;box-sizing: border-box;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+			.city_box .city_item ul li:nth-child(3n),.city_box .fixed_item ul li:nth-child(3n){margin-right: 0;}
+		</style>
+
+js:
+<script>
+	$(function(){
+		var province = ["常用","北京", "天津", "河北", "河南", "山西", "山东", "内蒙古", "辽宁", "吉林", "黑龙江", "上海", "江苏", "浙江", "福建", "江西", "安徽", "湖北", "湖南", "广东", "广西", "海南", "重庆", "四川", "贵州", "云南", "西藏", "陕西", "甘肃", "青海", "宁夏", "新疆", "台湾", "香港", "澳门"];
+			var city = [
+					["北京","上海","深圳","广州","杭州","成都","武汉","西安","南京","长沙","郑州","重庆"],
+					["北京"],
+					["天津"],
+					["石家庄", "唐山", "秦皇岛", "邯郸", "邢台", "保定", "张家口", "承德", "沧州", "廊坊", "衡水"],
+					["郑州", "开封", "洛阳", "平顶山", "安阳", "鹤壁", "新乡", "焦作", "濮阳", "许昌", "漯河", "三门峡", "商丘", "周口", "驻马店", "南阳", "信阳"],
+					["太原", "大同", "阳泉", "长治", "晋城", "朔州", "晋中", "运城", "忻州", "临汾", "吕梁"],
+					["济南", "青岛", "淄博", "枣庄", "东营", "烟台", "潍坊", "济宁", "泰安", "威海", "日照", "滨州", "德州", "聊城", "临沂", "菏泽", "莱芜"],
+					["呼和浩特", "包头", "乌海", "赤峰", "通辽", "鄂尔多斯", "呼伦贝尔", "巴彦淖尔", "乌兰察布", "兴安盟", "锡林郭勒盟", "阿拉善盟"],
+					["沈阳", "大连", "鞍山", "抚顺", "本溪", "丹东", "锦州", "营口", "阜新", "辽阳", "盘锦", "铁岭", "朝阳", "葫芦岛"],
+					["长春", "吉林", "四平", "辽源", "通化", "白山", "白城", "松原", "延边朝鲜族", "长白山保护开发区"],
+					["哈尔滨", "齐齐哈尔", "鸡西", "鹤岗", "双鸭山", "大庆", "伊春", "佳木斯", "七台河", "牡丹江", "黑河", "绥化", "大兴安岭地区"],
+					["上海"],
+					["南京", "无锡", "徐州", "常州", "苏州", "南通", "连云港", "淮安", "盐城", "扬州", "镇江", "泰州", "宿迁"],
+					["杭州", "宁波", "温州", "绍兴", "湖州", "嘉兴", "金华", "衢州", "台州", "丽水", "舟山"],
+					["福州", "厦门", "莆田", "泉州", "漳州", "龙岩", "三明", "南平", "宁德"],
+					["南昌", "赣州", "宜春", "吉安", "上饶", "抚州", "九江", "景德镇", "萍乡", "新余", "鹰潭"],
+					["合肥", "芜湖", "蚌埠", "淮南", "马鞍山", "淮北", "铜陵", "安庆", "黄山", "阜阳", "宿州", "滁州", "六安", "宣城", "池州", "亳州"],
+					["武汉", "黄石", "十堰", "荆州", "宜昌", "襄阳", "鄂州", "荆门", "黄冈", "孝感", "咸宁", "随州", "恩施"],
+					["长沙", "株洲", "湘潭", "衡阳", "邵阳", "岳阳", "张家界", "益阳", "常德", "娄底", "郴州", "永州", "怀化", "湘西"],
+					["广州", "深圳", "珠海", "汕头", "佛山", "韶关", "湛江", "肇庆", "江门", "茂名", "惠州", "梅州", "汕尾", "河源", "阳江", "清远", "东莞", "中山", "潮州", "揭阳", "云浮"],
+					["南宁", "柳州", "桂林", "梧州", "北海", "崇左", "来宾", "贺州", "玉林", "百色", "河池", "钦州", "防城港", "贵港"],
+					["海口", "三亚", "三沙", "儋州"],
+					["重庆"],
+					["成都", "绵阳", "自贡", "攀枝花", "泸州", "德阳", "广元", "遂宁", "内江", "乐山", "资阳", "宜宾", "南充", "达州", "雅安", "广安", "巴中", "眉山", "阿坝", "甘孜", "凉山彝族"],
+					["贵阳", "六盘水", "遵义", "安顺", "毕节", "铜仁", "黔西南布依族", "黔东南苗族侗族", "黔南布依族"],
+					["昆明", "昭通", "曲靖", "玉溪", "普洱", "保山", "丽江", "临沧", "楚雄彝族", "红河哈尼族", "文山", "西双版纳", "大理白族", "德宏傣族景", "怒江傈僳族", "迪庆"],
+					["拉萨", "昌都", "日喀则", "林芝", "山南", "那曲地区", "阿里地区"],
+					["西安", "铜川", "宝鸡", "咸阳", "渭南", "汉中", "安康", "商洛", "延安", "榆林", "杨凌农业高新技术产业示范区"],
+					["兰州", "嘉峪关", "金昌", "白银", "天水", "酒泉", "张掖", "武威", "定西", "陇南", "平凉", "庆阳", "临夏回族", "甘南"],
+					["西宁", "海东", "海北", "海南", "海西蒙古族", "黄南", "果洛", "玉树"],
+					["银川", "石嘴山", "吴忠", "固原", "中卫"],
+					["乌鲁木齐", "克拉玛依", "吐鲁番", "哈密", "阿克苏地区", "喀什地区", "和田地区", "伊犁哈萨克", "昌吉回族", "博尔塔拉蒙古", "巴音郭楞蒙古", "克孜勒苏柯尔克孜"],
+					["台北", "新北", "桃园", "台中", "台南", "高雄", "基隆", "新竹", "嘉义", "钓鱼岛列岛"],
+					["香港岛", "九龙半岛", "新界"],
+					["澳门半岛", "离岛"]
+				];
+
+
+		var areaList = $(".left_provice ul");
+			var cityBox = $(".right_city");
+			/*初始化省份*/
+			function intProvince() {
+				areaCont = "";
+				for (var i=0; i<province.length; i++) {
+					if(i==0){
+						areaCont += '<li class="active">' + province[i] + '</li>';
+					}else{
+						areaCont += '<li>' + province[i] + '</li>';
+					}
+				}
+				areaList.html(areaCont);
+			}
+			intProvince();
+
+			/*初始化市*/
+			function intCity() {
+				cityCont = "";
+				cityb = [];
+				cityItem = "";
+				cityArea = "";
+				for (var x=0; x<city.length; x++) {
+					cityb[x] = "";
+					for(var y=0;y<city[x].length;y++){
+						cityb[x] += '<li id="'+"cid"+x+y+'"><a href="javascript:void(0);">' + city[x][y] + '</a></li>';
+					}
+					if(x==0){
+						cityItem = '<div class="city_box active"><div class="fixed_item"><h4>当前定位</h4><ul><li id="fid1"><a href="javascript:void(0);">深圳</a></li></ul></div><div class="city_item"><h4>热门城市</h4><ul>'+cityb[x]+'</ul></div></div>';
+					}else{
+						cityItem = '<div class="city_box"><div class="city_item"><ul>'+cityb[x]+'</ul></div></div>';
+					}
+					cityArea += cityItem;
+				}
+				cityBox.html(cityArea);
+			}
+			intCity();
+
+
+			$(".fixed_city_box").on("click",".left_provice li",function(){
+				let index = $(this).index();
+				$(this).addClass("active").siblings().removeClass("active");
+				$(".right_city .city_box").eq(index).addClass("active").siblings(".city_box").removeClass("active");
+			})
+
+			$(".right_city").on("click",".city_item li,.fixed_item li",function(){
+				// alert($(this).attr("id"));
+			})
+		})
+	</script>
+
+
+50.中国地图
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/jsMap-2.0.0.min.js"></script>
+
+html:
+<div class="map"></div>
+
+js:
+详细参数：http://jsmap.applinzi.com
+jsMap.json( "map.json" ).done(function ( response ) {
+            jsMap.config( ".map", response, {
+                stroke: {
+                    width: 1,
+                    color: "#fff"
+                },
+                fill: {
+                	basicColor: "#c1c1c1",
+                	hoverColor: "#4ba6ff"
+                }
+            });
+        })
+
