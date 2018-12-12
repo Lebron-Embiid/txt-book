@@ -23,6 +23,10 @@ html{font-size: 625%;}
 	width: 12rem;
 	padding: 0;
 }
+/*最小宽*/
+.min{
+	min-width: 12rem;
+}
 .pc{
 	display: block;
 }
