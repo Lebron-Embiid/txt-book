@@ -1,0 +1,111 @@
+Mock.js：配合axios使用，生成随机模拟数据，拦截ajax请求（http://mockjs.com）
+
+使用方法：
+安装axios:
+npm install axios
+cnpm install axios
+
+npm install --save axios vue-axios
+cnpm install --save axios vue-axios
+
+安装mockjs:
+npm install mockjs
+cnpm install mockjs
+
+在项目src目录新建mock文件夹，再在此文件夹中新建mock.js文件，用来存取mock数据
+
+在main.js里面引入创建的mock.js文件
+import axios from "axios";
+import VueAxios from 'vue-axios';
+import './mock/mock.js';
+
+Vue.use(VueAxios, axios)
+//Vue.prototype.$http = axios
+
+mock.js：
+const Mock = require('mockjs');
+
+// 获取 mock.Random 对象
+ const Random = Mock.Random;
+
+ // mock一组数据
+ const produceData = function (opt) {
+  console.log('opt', opt);
+  let articles = [];
+  for (let i = 0; i < 5; i++) {
+   let newArticleObject = {
+    title: Random.csentence(5, 30), // Random.csentence( min, max )
+    thumbnail_pic_s: Random.dataImage('300x250', 'mock的图片'), // Random.dataImage( size, text ) 生成一段随机的 Base64 图片编码
+    author_name: Random.cname(), // Random.cname() 随机生成一个常见的中文姓名
+    date: Random.date() + ' ' + Random.time() // Random.date()指示生成的日期字符串的格式,默认为yyyy-MM-dd；Random.time() 返回一个随机的时间字符串
+   }
+   articles.push(newArticleObject)
+  }
+
+  return {
+   data: articles
+  }
+ }
+
+Mock.mock('/news', /post|get/i, produceData);//当post或get请求到/news路由时Mock会拦截请求并返回上面的数据
+
+
+然后在需要数据的vue组件中获取请求：
+created() {
+	//  '/news'是mock中定义的名字， 'type&key'是传参
+    	this.axios.post("/news", "type=top&key=123456").then(res => {
+	     console.log(res.data);
+	     this.msg = res.data.data;
+	});
+    }
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+mock.js的常用数据：
+
+id：Random.id()  |  Mock.mock('@id')
+
+中文名字：Random.cname()  |  Mock.mock('@cname')
+英文全称：Random.name()  |  Mock.mock('@name')
+英文姓氏：Random.last()  |  Mock.mock('@last')
+英文名字：Random.first()  |  Mock.mock('@first')
+
+布尔值：'bool|1': boolean
+
+年月日：Random.date()  |  Mock.mock('@date')
+时分秒：Random.time()  |  Mock.mock('@time')
+年月日 时分秒：Random.datetime()  |  Mock.mock('@datetime')
+当前时间：Random.now()  |  Mock.mock('@now')
+
+图片：Random.image()
+base64图片：Random.dataImage()
+
+网址：Random.url()  |  Mock.mock('@url')
+
+邮箱：Random.email()  |  Mock.mock('@email')
+
+颜色：Random.color()  |  Mock.mock('@color')
+rgba颜色：Random.rgba()  |  Mock.mock('@rgba')
+
+英文段落：Random.paragraph()  |  Mock.mock('@paragraph')
+句子：Random.sentence()  |  Mock.mock('@sentence')
+字母：Random.word()  |  Mock.mock('@word')
+英文标题：Random.title()  |  Mock.mock('@title')
+
+中文段落：Random.cparagraph()  |  Mock.mock('@cparagraph')
+中文句子：Random.csentence()  |  Mock.mock('@csentence')
+中文字：Random.cword()  |  Mock.mock('@cword')
+中文标题：Random.ctitle()  |  Mock.mock('@ctitle')
+
+省：Random.province()  |  Mock.mock('@province')
+市：Random.city()  |  Mock.mock('@city')
+区：Random.county()  |  Mock.mock('@county')
+省市区：Random.county(true)  |  Mock.mock('@county(true)')
+
+自然数：Random.natural()  |  Mock.mock('@natural')
+
+字符串：Random.string()  |  Mock.mock('@string')
+
+
