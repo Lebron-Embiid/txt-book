@@ -645,7 +645,7 @@ $(".file").on("change","input[type='file']",function(){
 html:
 <div class="img_box">
 	<img src="images/ls_head.png" class="ls_head">
-	<input type="file" class="file" name="">
+	<input type="file" class="file" accept="images/*" name="">
 </div>
 
 js:
@@ -673,7 +673,7 @@ js:
 	            }
 	        }
 	    }
-	$(".text-center").on("change","input",function(){
+	$(".img_box").on("change","input",function(){
 		var _this = this;
 		run(_this, function (data) {
 			$(_this).siblings().attr('src',data);
@@ -1555,7 +1555,7 @@ function invokeSettime(obj){
 	var countdown=60;
 	settime(obj);
 	function settime(obj) {
-		if (countdown <= 0) {
+		if (countdown <=1) {
 		   	$(obj).prop("disabled",false);
 		  	$(obj).val("获取验证码");
 		   	countdown = 60;
@@ -1571,7 +1571,9 @@ function invokeSettime(obj){
 	}
 }
 $(".getCode").click(function(){
-	invokeSettime(".getCode");
+	setTimeout(function(){
+		invokeSettime(".getCode");
+	},500)
 })
 
 
