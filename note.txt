@@ -236,6 +236,15 @@ button {
 -webkit-appearance: none;  
 }
 
+select去掉三角形：
+select{
+	appearance:none;
+	-moz-appearance:none;
+	-webkit-appearance:none;
+}
+
+IE9以下：
+select::-ms-expand { display: none; } 
 
 -webkit-box-shadow: 0 0 0px 1000px white inset;		//解决input输入框背景颜色变成黄色的问题
 background: repeating-linear-gradient(30deg, #79b, #79b 15px, #58a 0, #58a 30px);  //条形渐变背景
@@ -2324,4 +2333,22 @@ $(".btn").on('click',function(){
             'onClose':function(){}
         });
 </script>
+
+53.pc 点击复制到粘贴板：
+<input id="copy_text" type="text" value="renshi@adnice.com" disabled />
+<input type="button" id="copy_button" value="复制邮箱">
+
+$("#copy_button").click(function(){
+        	var Url2=$("#copy_text").val();
+	        var oInput = document.createElement('input');
+	        oInput.value = Url2;
+	        document.body.appendChild(oInput);
+	        oInput.select(); // 选择对象
+	        document.execCommand("Copy"); // 执行浏览器复制命令
+	        oInput.className = 'oInput';
+	        oInput.style.display='none';
+	        alert('复制成功');
+        })
+
+
 
