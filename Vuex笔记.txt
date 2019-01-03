@@ -1,0 +1,228 @@
+1. 搭建vue脚手架，安装vuex依赖
+2. 项目目录src下新建store目录和store.js文件（可以随便起名字，也可以是index.js）
+
+main.js:
+import store from './store/store.js'
+
+new Vue({
+  el: '#app',
+  router,
+  store,  		// 这样就能全局使用vuex了（主要是加上这个）
+  components: { App },
+  template: '<App/>'
+})
+
+store.js:
+import Vue from 'vue'
+import vuex from 'vuex'
+Vue.use(vuex);
+
+export default new vuex.Store({
+    state:{
+    	count: 0
+    },
+    mutations:{
+    	increment(state){
+    		state.count++
+    	}
+    },
+    getters:{
+	
+    },
+    actions:{
+
+    }
+})
+
+store属性：
+state 	(类似存储全局变量的数据)
+getters 	(提供用来获取state数据的方法)
+actions 	(提供跟后台接口打交道的方法，并调用mutations提供的方法)
+mutations	(提供存储设置state数据的方法)
+
+store文件夹结构：
+store
+    ├── index.js            	# 我们组装模块并导出 store 的地方
+    ├── actions.js       	# 根级别的 action
+    ├── mutations.js      	# 根级别的 mutation
+    └── modules
+        ├── cart.js       	   	# 购物车模块
+        └── products.js   	# 产品模块
+
+---------------------------------------------------------------------------------------------
+
+state:{
+		
+	count:0,
+		
+	todos: [
+			
+		{ id: 1, text: '水果类', done: true },
+			
+		{ id: 2, text: '苹果', done: true },
+			
+		{ id: 3, text: '苹果', done: false}
+	    
+	]
+	
+},
+getters: {  
+        //通过方法访问
+        doneTodos: state => {
+	return state.todos.filter(todo => todo.done)
+        },
+        //通过属性访问
+        doneTodosCount: (state, getters) => {
+	return getters.doneTodos.length
+        }
+},
+mutations: {
+        INCREMENT(state) {
+            state.count++;
+        },
+        DECREMENT(state, value){
+            state.count = state.count + value.intValue + value.anotherValue;
+        }
+},
+actions:{
+        increment({commit}){
+            commit("INCREMENT")
+        },
+        decrement({commit},value){
+            commit("DECREMENT")
+        },
+}
+
+$store.getters.doneTodos	//获取state的数据
+
+$store.commit('increment')	//vuex唯一修改状态的方法：提交mutations，必须同步执行
+$store.commit('increment',10)	//参数
+
+$store.dispatch('increment')	//分发action，可以异步操作
+$store.dispatch('decrement',{ value:this.incrementValue, anotherValue: this.countAnother})	//对象参数
+
+
+语法糖：
+import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+
+...mapState(namespace,['count'])		// 映射 this.count 到 this.$store.state.count（namespace是命名空间，可写）
+...mapGetters(namespace,['resturantName'])	// 动态计算属性，相当于this.$store.getters.resturantName
+...mapActions(namespace,['modifyAName']) 	// 相当于this.$store.dispatch('modifyName'),提交这个方法
+...mapMutations(namespace,['increment'])		// 映射 this.increment() 到 this.$store.commit('increment')
+
+---------------------------------------------------------------------------------------------
+
+大中型项目使用分模块结构：
+├── src/
+   │   ├── assets/
+   │   ├── components/
+   │   ├── store/
+   │   │   ├── actions/ 
+   │   │   │   ├──aAction.js
+   │   │   │   ├──bAction.js
+   │   │   │   └──cAction.js
+   │   │   ├── constants/
+   │   │   │   └── types.js
+   │   │   ├── getters/
+   │   │   │   └── aGetter.js
+   │   │   ├── modules/
+   │   │   │   ├── aModules.js
+   │   │   │   ├── bModules.js
+   │   │   │   └── cModules.js
+   │   │   ├── mutations/
+   │   │   │   ├── aMutation.js
+   │   │   │   ├── bMutation.js
+   │   │   │   └── cMutation.js
+   │   │   └── index.js
+
+------------------------------------------
+
+index.js：（挂载store）
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+import { list } from './modules/aModule'
+
+const store = new Vuex.Store({
+  modules: {
+    list: list
+  },
+  strict: process.env.NODE_ENV !== 'production'	//严格模式：无论何时发生了状态变更且不是由 mutation 函数引起的，将会抛出错误。
+})
+
+//热重载
+if (module.hot) {
+  module.hot.accept(['./mutations', './modules/a'], () => {	//添加新的模块以此类推
+    const newMutations = require('./mutations').default
+    const newModuleA = require('./modules/a').default	//添加新的模块以此类推
+    store.hotUpdate({
+      mutations: newMutations,
+      modules: {
+        a: newModuleA				//添加新的模块以此类推
+      }
+    })
+  })
+}
+
+export default store
+
+------------------------------------------
+
+modules/aModule.js：
+import { fetchListAction } from '../actions/aAction'
+import { fetchListGetter } from '../getters/aGetter'
+import { fetchListMutation } from '../mutations/aMutation'
+
+const list = {
+    /**
+    * 定义命名空间，防止多个模块同名共享，使用时需要带上命名空间
+    */
+    namespaced: true,
+    state: {
+        listArr: []
+    }
+    actions: fetchListAction,
+    getters: fetchListGetter,
+    mutations: fetchListMutation
+}
+
+export default list;
+
+------------------------------------------
+
+template：
+{{$store.state.count}}		//不使用模块时
+{{$store.state.list.count}}	//分模块时，list是模块输出名称
+
+computed:{
+        
+	// 映射带有命名空间的state，第一个参数模块名
+        
+	...mapState('list', ['listArr']) ,
+	...mapState('list', {'listArr':state=>state.listArr}) ,
+
+	...mapGetters('list',['theCount']),
+	theCount: function () { // 获取getters
+                	return this.$store.getters.theCount;
+	}
+},
+
+methods: {
+	...mapMutations('list',[ 'increment']),	//第一个参数是命名空间
+	increment(){
+		this.$store.commit("list/increment");
+	},
+
+	...mapActions('list',[ 'increment']),
+	increment(){
+		this.$store.dispatch('increment');
+	})
+      }
+}
+
+
+
+
+
