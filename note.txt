@@ -2351,4 +2351,37 @@ $("#copy_button").click(function(){
         })
 
 
+54.获取高亮的def值，添加到数组。
+<ul>
+	<li def="1" class="active">name</li>
+	<li def="2" class="">name</li>
+	<li def="3" class="">name</li>
+</ul>
+
+js:
+Array.prototype.indexOf = function(val) { //prototype 给数组添加属性
+            for (var i = 0; i < this.length; i++) { //this是指向数组，this.length指的数组类元素的数量
+                if (this[i] == val) return i; //数组中元素等于传入的参数，i是下标，如果存在，就将i返回
+            }
+            return -1;
+        };
+Array.prototype.remove = function(val) {  //prototype 给数组添加属性
+            var index = this.indexOf(val); //调用index()函数获取查找的返回值
+            if (index > -1) {
+                this.splice(index, 1); //利用splice()函数删除指定元素，splice() 方法用于插入、删除或替换数组的元素
+            }
+        };
+
+var sArr = [];
+        $(".hobby_box").on("click","li",function(){
+            var s_obj = $(this).attr("def");
+            // $(this).toggleClass("active");
+            if($(this).hasClass("active")){
+                $(this).removeClass("active");
+                sArr.remove(s_obj);
+            }else{
+                $(this).addClass("active");
+                sArr.push(s_obj);
+            }
+
 
