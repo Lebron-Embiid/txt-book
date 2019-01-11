@@ -1,3 +1,9 @@
+vuex-router-sync：主要是把 vue-router 的状态放进 vuex 的 state 中，这样就可以通过改变 state 来进行路由的一些操作，
+当然直接使用像是 $route.go 之类的也会影响到 state ，会同步的是这几个属性（path,params,query）
+
+npm install vuex-router-sync --save
+
+-------------------------------------------------------------------------------------
 1. 搭建vue脚手架，安装vuex依赖
 2. 项目目录src下新建store目录和store.js文件（可以随便起名字，也可以是index.js）
 
