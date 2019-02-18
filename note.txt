@@ -382,6 +382,8 @@ css:
 	width: 100%;
 	float: left;
 }
+
+//图片横向100%
 .swiper-container .swiper-slide img{
 	display: block;
 	width: 100%;
@@ -445,10 +447,12 @@ var swiper = new Swiper('.swiper-container',{
 
 //鼠标移上去禁止自动轮播
 $('.index_banner').mouseover(function(){
-  	swiper.stopAutoplay();
+  	swiper.stopAutoplay();	//swiper3
+	swiper.autoplay.stop();	//swiper4
 })
 $('.index_banner').mouseout(function(){
   	swiper.startAutoplay();
+	swiper.autoplay.start();
 })
 
 

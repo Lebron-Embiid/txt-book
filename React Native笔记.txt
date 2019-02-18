@@ -1,3 +1,10 @@
+React新建项目：
+npx create-react-app my-app
+cd my-app
+npm/yarn start
+
+------------------------------------------------------------------------
+
 React Native文档：https://reactnative.cn/docs/getting-started/
 
 https://www.cnblogs.com/jone-chen/p/6248465.html（React Native教程）
