@@ -1057,7 +1057,7 @@ function imgRes(obj){
 
 
 
-23.整屏图片背景：
+23.全屏图片背景：
 var wh=window.innerHeight;
 $(window).resize(function(){$('.fullimg').height(wh)});
 
