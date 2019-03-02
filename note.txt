@@ -784,10 +784,14 @@ li:hover::after { border-bottom-color: #f2054d; border-left-color: #f2054d; -web
         </ul>
 </div>
 
+ul{
+	position: relative;
+}
 ul span{
 	width: 100%;
 	position: absolute;
 	height: 2px;
+	left: 0;
 	bottom: 0;
 	background: #E31939;
 }
