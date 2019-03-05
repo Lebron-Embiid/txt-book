@@ -1,3 +1,6 @@
+<?php echo $_SERVER['PHP_SELF']; ?>	//当前页面的相对路径
+order by rand() limit 5		//随机取5条
+
 1.include头文件：
 include 'php_conn.php';
 include 'setup.php';
@@ -43,11 +46,11 @@ include 'setup.php';
 	}else{
 		if($page<1)$page=1;
 	}
-		if($page>=$total)$page=$total;
-		$sql.=" limit ".(($page-1)*$p_size).",".$p_size;
-		$product1 = mysql_query($sql);
-		while($res1 = mysql_fetch_assoc($product1)){
-	?>
+	if($page>=$total)$page=$total;
+	$sql.=" limit ".(($page-1)*$p_size).",".$p_size;
+	$product1 = mysql_query($sql);
+	while($res1 = mysql_fetch_assoc($product1)){
+?>
 <?php } ?>
 
 图片：uploadfiles/<?php echo $res['images1']; ?>
@@ -111,6 +114,10 @@ $next=mysql_fetch_assoc(mysql_query("select * from atype_info WHERE id<{$page} A
 
 添加样式隐藏：
 <?php if(in_array($manage_id,array(1))){ ?>style="display: none;" <?php } ?>
+
+显示英文提示：
+<?php if ($bb_en == '001' || in_array($manage_id,array(1))) { ?>
+<?php } ?>
 
 判断隐藏：
 <?php if(in_array($manage_id,array(12))){ echo "地  址"; } else { echo "信息名称"; } ?>
