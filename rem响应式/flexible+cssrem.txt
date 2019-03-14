@@ -1,0 +1,76 @@
+1、打开sublime text 3使用快捷键Ctrl + Shift + p，cssrem
+2、{
+"px_to_rem": 40, //px转rem的单位比例，默认为40 （html根元素font-size是多少就改成多少）
+"max_rem_fraction_length": 6, //px转rem的小数部分的最大长度。默认为6。
+"available_file_types": [".css", ".less", ".sass",".html"]
+//启用此插件的文件类型。默认为：[".css", ".less", ".sass"]
+}
+
+
+3、页面引入：
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="apple-touch-fullscreen">
+<meta content="telephone=no,email=no" name="format-detection">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="Shortcut Icon" href="favicon.png" type="image/x-icon">
+<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+
+-------------------------------------------------------------------------------------------------------
+
+1、直接引入：（单位用rem，1rem=100px）
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<script type="text/javascript" src="rem.js"></script>
+
+
+---------------------------------------
+
+使用rem遇到的兼容问题：
+1.IOS下 1px边框变粗或者模糊的解决方法：（伪类 + transform 实现）
+.scale-1px{
+  position: relative;
+  border:none;
+}
+.scale-1px:after{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #000;
+  width: 100%;
+  height: 1px;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+
+4条border的情况：
+.scale-1px{
+  position: relative;
+  border:none;
+}
+.scale-1px:after{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #000;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 200%;
+  height: 200%;
+  -webkit-transform: scale(0.5);
+  transform: scale(0.5);
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+}
+
+
+背景渐变：
+background: -webkit-gradient(linear, left top, right top, from(#ffa51b) , to(#fec633));
+background: -webkit-linear-gradient(left, #ffa51b , #fec633);
+background: -o-linear-gradient(left, #ffa51b , #fec633);
+background: linear-gradient(to right, #ffa51b , #fec633);

@@ -165,6 +165,9 @@ blockquote:before, blockquote:after, q:before, q:after{ content: ''; content: no
 获取当前页面的title标题：
 <script>document.write($(document).attr("title"));</script>
 
+最大高：（去除头部高度）
+max-height: calc(100% - 58px);
+
 2.溢出部分显示省略号:
 display: -webkit-inline-box;
 
@@ -182,6 +185,7 @@ max-width: 80%;
 overflow: hidden;
 text-overflow: ellipsis;
 white-space: nowrap;
+word-break: break-all;
 
 阴影：
 -webkit-box-shadow: 0 0 10px #EBEBEB;
