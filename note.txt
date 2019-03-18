@@ -550,23 +550,25 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 </div>
 
 切换按钮样式（块状）：
+.carousel-indicators{
+	bottom: .8rem;
+	margin-bottom: 0;
+}
 .carousel-indicators li{
 	width: .5rem;
 	height: 2px;
 	background: #fff;
 	border-radius: 0;
 	border: 0;
-	margin: 0;
-	margin-right: .1rem;
+	margin: 0 .15rem 0 0 ;
 	transition: all .5s ease;
 }
 .carousel-indicators .active{
 	width: .5rem;
 	height: 2px;
 	border-radius: 0;
-	margin: 0;
+	margin: 0 .15rem 0 0 ;
 	background: #006ACD;
-	margin-right: .1rem;
 }
 .carousel-indicators li:last-child{
 	margin-right: 0;
@@ -783,9 +785,9 @@ li:hover::after { border-bottom-color: #f2054d; border-left-color: #f2054d; -web
 13.导航滑动效果
 <div>
 	<ul>
-        	<li>首页</li>
+        		<li>首页</li>
        		<span class="line"></span>
-        </ul>
+        	</ul>
 </div>
 
 ul{
@@ -1114,6 +1116,64 @@ $('#dowebok').fullpage({
 		
 	}
 });
+
+// 锚点滚动
+$('.header_nav a').on('click',function(e){
+	//阻止a标签的默认行为跳转,这样就不会把#判断符带入到url中
+	e = e || window.event;
+	e.preventDefault();
+	// 获取id号,得到是#box1
+	var target = $(this).prop('hash');
+	if(target == "#index"){
+		$('html,body').stop().animate({scrollTop: 0},500);
+	}else{
+		//将页面滚动到对应的位置
+		$('html,body').stop().animate({scrollTop: $(target).offset().top-218},500);
+	}
+});
+
+//浏览器滚动位置判断锚点
+$(window).scroll(function(){
+	var index_height = $("#index").position().top;
+	var introduce_height = parseInt($("#introduce").position().top-217);
+	var features_height = parseInt($("#features").position().top-217);
+	var scenes_height = parseInt($("#scenes").position().top-217);
+	var factory_height = parseInt($("#factory").position().top-217);
+	var profile_height = parseInt($("#profile").position().top-217);
+	var other_height = parseInt($("#other").position().top-217);
+	var footer_height = parseInt($("#footer").position().top-217);
+
+	var top = parseInt($(this).scrollTop());
+
+	if(top < introduce_height){
+		console.log(top+"------"+1);
+		$('.header_nav ul span').css({'left':$('.header_nav ul li').eq(0).position().left,'width':$('.header_nav ul li').eq(0).outerWidth()});
+	}
+	else if(introduce_height <= top && top < features_height){
+		console.log(top+"------"+2);
+		$('.header_nav ul span').css({'left':$('.header_nav ul li').eq(1).position().left,'width':$('.header_nav ul li').eq(1).outerWidth()});
+	}
+	else if(features_height <= top && top < scenes_height){
+		console.log(top+"------"+3);
+		$('.header_nav ul span').css({'left':$('.header_nav ul li').eq(2).position().left,'width':$('.header_nav ul li').eq(2).outerWidth()});
+	}
+	else if(scenes_height <= top && top < factory_height){
+		console.log(top+"------"+4);
+		$('.header_nav ul span').css({'left':$('.header_nav ul li').eq(3).position().left,'width':$('.header_nav ul li').eq(3).outerWidth()});
+	}
+	else if(factory_height <= top && top < profile_height){
+		console.log(top+"------"+5);
+		$('.header_nav ul span').css({'left':$('.header_nav ul li').eq(4).position().left,'width':$('.header_nav ul li').eq(4).outerWidth()});
+	}
+	else if(profile_height <= top && top < other_height){
+		console.log(top+"------"+6);
+		$('.header_nav ul span').css({'left':$('.header_nav ul li').eq(5).position().left,'width':$('.header_nav ul li').eq(5).outerWidth()});
+	}
+	else{
+		console.log(top+"------"+7);
+		$('.header_nav ul span').css({'left':$('.header_nav ul li').eq(6).position().left,'width':$('.header_nav ul li').eq(6).outerWidth()});
+	}
+})
 
 
 锚点导航滑动切换：
