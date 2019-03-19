@@ -1132,6 +1132,21 @@ $('.header_nav a').on('click',function(e){
 	}
 });
 
+//打开页面判断是否有锚点
+if($(window).width() < 768){
+	$(window).on("load",function(e){
+		var target = location.hash;	//获取地址栏的锚点（#）
+		if(target != ""){
+			if(target == "#index"){
+				$('html,body').stop().animate({scrollTop: 0},500);
+			}else{
+				//将页面滚动到对应的位置
+				$('html,body').stop().animate({scrollTop: $(target).position().top-50},500);
+			}
+		}
+	})
+}
+
 //浏览器滚动位置判断锚点
 $(window).scroll(function(){
 	var index_height = $("#index").position().top;
