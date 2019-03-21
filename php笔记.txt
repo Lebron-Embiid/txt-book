@@ -58,6 +58,27 @@ include 'setup.php';
 
 uploadfiles/<?php echo sf(26,'images2');?>
 
+bootstrap轮播循环：
+<?php 
+	$sql = "select * from atype_info where type_id = 34 order by num asc";
+	$banner = mysql_query($sql);
+	$a = 0;
+	while($index_banner = mysql_fetch_assoc($banner)){
+?>
+	<li data-target="#carousel-example-generic" data-slide-to="<?php echo $a; ?>" class="<?php if($a == 0){ echo 'active'; } ?>"></li>
+<?php $a++;} ?>
+
+<?php 
+	$sql = "select * from atype_info where type_id = 34 order by num asc";
+	$banner = mysql_query($sql);
+	$a = 0;
+	while($index_banner = mysql_fetch_assoc($banner)){
+?>
+	<div class="item <?php if($a == 0){ echo 'active'; } ?>">
+		<img src="uploadfiles/<?php echo $index_banner['images2']; ?>" alt="" class="img-responsive">
+	</div>
+<?php $a++;} ?>
+
 4.查询多个分类的数据（$i可设置默认高亮）：
 <?php 
 	$sql = 'select * from  atype_info where 1 = 1 ';
@@ -117,6 +138,10 @@ $next=mysql_fetch_assoc(mysql_query("select * from atype_info WHERE id<{$page} A
 
 显示英文提示：
 <?php if ($bb_en == '001' || in_array($manage_id,array(1))) { ?>
+<?php } ?>
+
+<?php if (in_array($manage_id,array(14))) { ?>
+	//添加注释
 <?php } ?>
 
 判断隐藏：

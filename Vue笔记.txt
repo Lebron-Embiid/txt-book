@@ -74,6 +74,12 @@ npm run build
 打包后生成dist文件夹，
 发布的话直接把 dist 目录丢到服务器就OK  访问xxx/dist/index.html
 
+vue cli3.0 需要在根目录新建vue.config.js文件：
+module.exports = {
+	baseUrl: './',
+  	outputDir: 'dist',
+}
+
 
 Vue项目字体px转rem响应式：（https://blog.csdn.net/skyblacktoday/article/details/80433575）
 进入项目下载：
