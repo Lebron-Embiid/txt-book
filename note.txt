@@ -1908,7 +1908,45 @@ $(".getCode").click(function(){
 </script>
 
 
-40.滚动广告：
+40.logo滚动广告：
+html:
+<div class="scroll">
+	<ul>
+		<li><img src="./images/0001.png" alt=""></li>
+		<li><img src="./images/0002.png" alt=""></li>
+		<li><img src="./images/0003.png" alt=""></li>
+		<li><img src="./images/0004.png" alt=""></li>
+		<li><img src="./images/0005.png" alt=""></li>
+		<li><img src="./images/0006.png" alt=""></li>
+	</ul>
+</div>
+
+css:
+.scroll {
+	width: 600px;
+	border: 1px solid #ccc;
+	overflow: hidden;
+}
+.scroll ul {
+	white-space: nowrap;
+}
+.scroll ul li {
+	display: inline-block;
+	margin: 10px;
+}
+
+js:
+<script src="js/scroll.js"></script>
+<script type="text/javascript">
+	$(function () {
+		$('.scroll').scroll({
+			speed: 80, //数值越大，速度越快
+			direction: 'horizantal'
+		});
+	});
+</script>
+
+
 .ad_box{
 	overflow: hidden;
 	background: #fff;
