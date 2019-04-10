@@ -265,6 +265,8 @@ select{
 IE9以下：
 select::-ms-expand { display: none; } 
 
+::-webkit-input-placeholder{color: #fff;}	//placeholder颜色
+
 -webkit-box-shadow: 0 0 0px 1000px white inset;		//解决input输入框背景颜色变成黄色的问题
 background: repeating-linear-gradient(30deg, #79b, #79b 15px, #58a 0, #58a 30px);  //条形渐变背景
 

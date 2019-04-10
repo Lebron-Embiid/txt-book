@@ -1,0 +1,138 @@
+uni-app upx 是相对于基准宽度的单位，可以根据屏幕宽度进行自适应。uni-app 规定屏幕基准宽度750upx。
+页面元素宽度在 uni-app 中的宽度计算公式：
+750 * 元素在设计稿中的宽度 / 设计稿基准宽度
+
+静态文件全部放在static文件夹（image，css）
+新建common文件夹，可以用于存放公用js或者接口
+
+全局变量，再main.js挂载：
+import httpApi from './common/httpApi'
+import HttpRequest from './common/httpRequest'
+import HttpCache from './common/cache'
+
+Vue.prototype.$api = httpApi
+Vue.prototype.$Request = HttpRequest
+Vue.prototype.$Sysconf = HttpRequest.config
+Vue.prototype.$SysCache = HttpCache
+
+调用：this.$api
+
+--------------------------------------------------------------
+注意：
+1. 禁用原生导航后，打包后自定义导航与手机状态栏重叠的解决方法：
+<!-- #ifdef APP-PLUS -->  
+<view class="status_bar">  
+    <view class="top_view"></view>  
+</view>  
+<!-- #endif -->  
+
+禁用原生导航的页面样式：
+top: var(--status-bar-height);	（固定定位的top）
+
+App.vue全局样式：
+.status_bar {  
+    height: var(--status-bar-height);  
+    width: 100%;  
+    background-color: #F8F8F8;  
+}  
+.top_view {  
+    height: var(--status-bar-height);  
+    width: 100%;  
+    position: fixed;  
+    background-color: #F8F8F8;  
+    top: 0;  
+    z-index: 999;  
+}  
+
+
+--------------------------------------------------------------
+选项卡效果模板：
+<view class="list_nav">
+	<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
+</view>
+<!-- 视频 -->
+<view class="video_list" v-show="currentTab == 0">
+		
+</view>
+<!-- 音频 -->
+<view class="audio_list" v-show="currentTab == 1">
+		
+</view>
+
+data(){
+	return{
+		navbar:[{name:"视频"},{name:"音频"}],
+		currentTab:0
+	}
+},
+methods:{
+	navbarTap: function(e){
+		console.log(e)
+		this.currentTab = e;
+	}
+}
+
+-----------------------------------------------------------
+picker效果：
+<picker class="acc_right" @change="bindPickerChange" :value="index" :range="array">
+	<view class="uni-input">{{array[index]}}</view>
+	<image src="../../static/next.png" mode="widthFix"></image>
+</picker>
+
+data:{
+	array: ['中国', '美国', '巴西', '日本'],
+	index: 0,
+},
+methods:{
+	bindPickerChange: function(e) {
+		console.log('picker发送选择改变，携带值为', e.target.value)
+		this.index = e.target.value
+	}
+}
+
+------------------------------------------------------------
+省市区三级联动：
+<cityPicker :themeColor="themeColor" ref="cityPicker" :pickerValueDefault="cityPickerValueDefault" @onCancel="onCancel" @onConfirm="onConfirm"></cityPicker>
+<view class="acc_right" @click="showMulLinkageThreePicker">
+	<view>{{pickerText}}</view>
+	<image src="../../static/next.png" mode="widthFix"></image>
+</view>
+
+js:
+import cityPicker from '../../components/citypicker/cityPicker.vue'
+import cityData from '../../common/city.data.js'
+export default{
+	data(){
+		return{
+			cityPickerValueDefault: [0, 0, 1],
+                		themeColor: '#007AFF',
+			pickerText: '请选择'
+		}
+	},
+	components:{
+		cityPicker
+	},
+	methods:{
+		onCancel(e) {
+                		this.$refs.cityPicker.pickerCancel();
+            		},
+		onConfirm(e) {
+			console.log(e.label);
+                		this.pickerText = e.label;
+            		},
+		showMulLinkageThreePicker(e){
+			this.$refs.cityPicker.showPickerView();
+		}
+	},
+ 	onBackPress() {
+		if (this.$refs.cityPicker.showPicker) {
+		this.$refs.cityPicker.pickerCancel();
+			return true;
+		}
+       	 },
+	onUnload() {
+		if (this.$refs.cityPicker.showPicker) {
+			this.$refs.cityPicker.pickerCancel();
+            		}
+	}
+}
