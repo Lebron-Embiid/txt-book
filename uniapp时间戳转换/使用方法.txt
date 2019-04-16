@@ -1,0 +1,5 @@
+1.引入（哪个文件使用就在哪个文件引入）
+import date from "@/common/date.js"
+
+使用：
+date.formatDate(parseInt(124321421421));	//只能是整型
