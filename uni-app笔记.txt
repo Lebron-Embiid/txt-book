@@ -60,8 +60,58 @@ App.vue全局样式：
 2.修改单独的某个页面背景颜色：
 <view class="page_bg"></view>
 .page_bg{background: #f5f5f7 !important;min-height: 100%;position: fixed;width: 100%;z-index: -1;left: 0;top: 0;}
+--------------------------------------------------------------
+
+对接接口模板：
+main.js：
+Vue.prototype.$api = "http://gao2.demenk.com/youlanphp/web/index.php?store_id=1&r=api/"
+Vue.prototype.$access_token = '8baae9367939e871a82286f778f3ad77'
+//uni.getStorageSync('access_token')
+
+var that = this;
+uni.request({
+				url: that.$api+'default/goods-list&access_token='+that.$access_token,
+				data: {},
+				method: 'GET',
+				dataType: "json",
+				header: {
+					'content-type': 'application/x-www-form-urlencoded'
+				},
+				success: res => {
+					if(res.data.code == 1){
+						//登录成功后，缓存token。
+						uni.setStorageSync('access_token',res.data.data.access_token);
+						uni.showToast({title:res.data.msg,icon:'none',duration:1500});
+						that.$access_token = uni.getStorageSync('access_token');
+						setTimeout(function(){
+							uni.reLaunch({
+								url: "/pages/index/index"
+							})
+						},1500)		
+					}
+				},
+				fail: () => {
+					uni.showToast({
+						title:res.data.msg,
+						icon:'none',
+					});
+				}
+			});
 
 
+uni.showModal模板：
+uni.showModal({
+	title: "提示",
+	content: "确定发布？",
+	success: (res) => {
+		if(res.confirm){
+			
+		}
+	},
+	fail: (err) => {
+		console.log(err)
+	}
+})
 
 --------------------------------------------------------------
 
