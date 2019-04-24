@@ -235,3 +235,32 @@ export default{
             		}
 	}
 }
+
+------------------------------
+上传图片
+uni.uploadFile({
+							url: that.$api+'default/upload-image', //图片接口
+							filePath: res.tempFilePaths[0],
+							name: 'image',
+							success: (uploadFileRes) => {
+								var data = JSON.parse(uploadFileRes.data);
+								console.log(data.data.url);
+								that.photos.push(data.data.url);
+								console.log(that.photos)
+							}
+						});
+
+-----------------------------------
+
+富文本解析：
+<u-parse :content="answer"></u-parse>
+import uParse from '@/components/u-parse/u-parse.vue'
+
+data(){
+			return{
+				answer: ""
+			}
+		},
+		components:{
+			uParse
+		},

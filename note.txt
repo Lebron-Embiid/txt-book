@@ -146,7 +146,20 @@ blockquote:before, blockquote:after, q:before, q:after{ content: ''; content: no
 .right{float:right;}
 .clear{ height:0; overflow:hidden; clear:both}
 
+-------------------------------------------------------
+jq获取地址栏的参数值：
+$.getUrlParam = function(name){
+var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+var r = window.location.search.substr(1).match(reg);
+if (r!=null) return unescape(r[2]); return null;
+}
 
+alert($.getUrlParam('page'));
+
+例子：当一个页面的地址是下面这个，那么我们使用了上面的jQuery代码，就会弹出一个数字5了。
+http://www.caibaojian.com/front?page=5
+
+-------------------------------------------------------
 定时器：
 <script type="text/javascript"> 
 	var t=3;//设定跳转的时间 
@@ -264,6 +277,12 @@ select{
 
 IE9以下：
 select::-ms-expand { display: none; } 
+
+input type为number时，隐藏加减按钮：
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+    }
 
 ::-webkit-input-placeholder{color: #fff;}	//placeholder颜色
 
