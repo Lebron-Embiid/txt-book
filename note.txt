@@ -2747,3 +2747,45 @@ var sArr = [];
             }
 
 
+55.评分效果：
+html:
+<ul id="star">
+	<li><a href="javascript:;"></a></li>
+	<li><a href="javascript:;"></a></li>
+	<li><a href="javascript:;"></a></li>
+	<li><a href="javascript:;"></a></li>
+	<li><a href="javascript:;"></a></li>
+</ul>
+
+css:
+#star{overflow: hidden;}
+#star li{float:left;overflow: hidden;padding-right: .15rem;}
+//图片切成雪碧图  上下
+#star li a{display: block;width:.35rem;height: .33rem;cursor:pointer;background:url(../images/star1.png) no-repeat;background-size: 100%;}
+#star li.on a{background-position:0 -.45rem;}
+
+js:
+var i = iScore = iStar = 0;
+		
+		$("#star").on("mouseover","li",function(){
+			fnPoint($(this).index()+1);
+		})
+		$("#star").on("mouseout","li",function(){
+			fnPoint();
+		})
+		$("#star").on("click","li",function(){
+			iStar = $(this).index()+1;
+		})
+		
+		//评分处理
+		function fnPoint(iArg){
+			//分数赋值
+			iScore = iArg || iStar;
+			for (i = 0; i < $("#star li").length; i++){
+				if(i < iScore){
+					$("#star li").eq(i).attr("class","on");
+				}else{
+					$("#star li").eq(i).attr("class","");					
+				}
+			}	
+		}
